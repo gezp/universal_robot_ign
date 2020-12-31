@@ -85,7 +85,7 @@ the package contains  robotic arm `universal_robot` SDF models (`ur3`,`ur5`,`ur1
 
 ## 3. Controller
 
-**Controller Struture **
+**Controller Struture**
 
 Ignition Controller
 
