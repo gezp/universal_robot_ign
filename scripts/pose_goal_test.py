@@ -5,10 +5,11 @@ import threading
 import rclpy
 from moveit2 import MoveIt2Interface
 from geometry_msgs.msg import Quaternion
-from scipy.spatial.transform import Rotation
 import time
 from math import sin, cos, pi
 
+
+#refer https://index.ros.org/doc/ros2/Tutorials/URDF/Using-URDF-with-Robot-State-Publisher/
 def euler_to_quaternion(roll, pitch, yaw):
   qx = sin(roll/2) * cos(pitch/2) * cos(yaw/2) - cos(roll/2) * sin(pitch/2) * sin(yaw/2)
   qy = cos(roll/2) * sin(pitch/2) * cos(yaw/2) + sin(roll/2) * cos(pitch/2) * sin(yaw/2)

@@ -3,6 +3,8 @@ A simple python interface with MoveIt2 services (and actions). This is an altern
 moveit_commander, which is not yet ported to ROS 2 (as of Oct 2020).
 Note: This module is currently configured for Franka Emika Panda robot.
 Note: There is no Ignition-specific code in this module (this repo is just a convinient place).
+
+the code is from https://github.com/AndrejOrsula/ign_moveit2 ,and is modified.
 """
 
 import threading
