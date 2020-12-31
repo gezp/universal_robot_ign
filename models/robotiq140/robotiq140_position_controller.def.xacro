@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<sdf version='1.7'>
+    <xacro_define_property name="global_robotiq_p" value="5"/>
+    <xacro_define_property name="global_robotiq_i" value="0"/>
+    <xacro_define_property name="global_robotiq_d" value="0.01"/>
+    <xacro_define_macro name="joint_position_contoller_plugin" params="joint_name p i d i_max i_min">
+        <plugin filename="ignition-gazebo-joint-position-controller-system"
+                name="ignition::gazebo::systems::JointPositionController">
+            <joint_name>${joint_name}</joint_name>
+            <p_gain>${p}</p_gain>
+            <i_gain>${i}</i_gain>
+            <d_gain>${d}</d_gain>
+            <i_max>${i_max}</i_max>
+            <i_min>${i_min}</i_min>
+        </plugin>
+    </xacro_define_macro>
+    <xacro_define_macro name='robotiq140_position_controller'>
+        <xacro_macro name="joint_position_contoller_plugin" joint_name="finger_joint"
+                p="${global_robotiq_p}" i="${global_robotiq_i}" d="${global_robotiq_d}" i_max="-1" i_min="1"/>
+        <xacro_macro name="joint_position_contoller_plugin" joint_name="left_inner_finger_joint"
+                p="${global_robotiq_p}" i="${global_robotiq_i}" d="${global_robotiq_d}" i_max="-1" i_min="1"/>
+        <xacro_macro name="joint_position_contoller_plugin" joint_name="left_inner_knuckle_joint"
+                p="${global_robotiq_p}" i="${global_robotiq_i}" d="${global_robotiq_d}" i_max="-1" i_min="1"/>
+        <xacro_macro name="joint_position_contoller_plugin" joint_name="right_inner_knuckle_joint"
+                p="${global_robotiq_p}" i="${global_robotiq_i}" d="${global_robotiq_d}" i_max="-1" i_min="1"/>
+        <xacro_macro name="joint_position_contoller_plugin" joint_name="right_outer_knuckle_joint"
+                p="${global_robotiq_p}" i="${global_robotiq_i}" d="${global_robotiq_d}" i_max="-1" i_min="1"/>
+        <xacro_macro name="joint_position_contoller_plugin" joint_name="right_inner_finger_joint"
+                p="${global_robotiq_p}" i="${global_robotiq_i}" d="${global_robotiq_d}" i_max="-1" i_min="1"/>
+    </xacro_define_macro>
+</sdf>

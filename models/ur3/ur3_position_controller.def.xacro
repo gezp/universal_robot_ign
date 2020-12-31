@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<sdf version='1.7'>
+    <xacro_define_macro name="joint_position_contoller_plugin" params="joint_name p i d i_max i_min">
+        <plugin filename="ignition-gazebo-joint-position-controller-system"
+                name="ignition::gazebo::systems::JointPositionController">
+            <joint_name>${joint_name}</joint_name>
+            <p_gain>${p}</p_gain>
+            <i_gain>${i}</i_gain>
+            <d_gain>${d}</d_gain>
+            <i_max>${i_max}</i_max>
+            <i_min>${i_min}</i_min>
+        </plugin>
+    </xacro_define_macro>
+    <xacro_define_macro name='ur3_position_controller'>
+        <!--plugins for ur-->
+        <xacro_macro name="joint_position_contoller_plugin" joint_name="shoulder_pan_joint"
+                p="1000" i="10" d="150" i_max="1" i_min="-1"/>
+        <xacro_macro name="joint_position_contoller_plugin" joint_name="shoulder_lift_joint"
+                p="5000" i="10" d="150" i_max="50" i_min="-50"/>
+        <xacro_macro name="joint_position_contoller_plugin" joint_name="elbow_joint"
+                p="1000" i="10" d="150" i_max="25" i_min="-25"/>
+        <xacro_macro name="joint_position_contoller_plugin" joint_name="wrist_1_joint"
+                p="20" i="1" d="0.2" i_max="1" i_min="-1"/>
+        <xacro_macro name="joint_position_contoller_plugin" joint_name="wrist_2_joint"
+                p="20" i="1" d="0.2" i_max="1" i_min="-1"/>
+        <xacro_macro name="joint_position_contoller_plugin" joint_name="wrist_3_joint"
+                p="20" i="1" d="0.2" i_max="1" i_min="-1"/>
+    </xacro_define_macro>
+</sdf>

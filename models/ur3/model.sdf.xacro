@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<sdf version="1.7">
+    <!--include defination-->
+    <xacro_include_definition uri="model://ur3/ur3.def.xacro" />
+    <xacro_include_definition uri="model://ur3/ur3_position_controller.def.xacro" />
+    <!--model-->
+    <model name="ur3">
+        <xacro_macro name="ur3" parent="__model__"/>
+        <!--plugins for ur-->
+        <xacro_macro name="ur3_position_controller"/>
+        <!--joint state publisher-->
+        <plugin filename="ignition-gazebo-joint-state-publisher-system" 
+                name="ignition::gazebo::systems::JointStatePublisher">
+            <joint_name>shoulder_pan_joint</joint_name>
+            <joint_name>shoulder_lift_joint</joint_name>
+            <joint_name>elbow_joint</joint_name>
+            <joint_name>wrist_1_joint</joint_name>
+            <joint_name>wrist_2_joint</joint_name>
+            <joint_name>wrist_3_joint</joint_name>
+        </plugin>
+    </model>
+</sdf>

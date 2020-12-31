@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<sdf version="1.7">
+    <!--include defination-->
+    <xacro_include_definition uri="model://ur10/ur10.def.xacro" />
+    <xacro_include_definition uri="model://ur10/ur10_position_controller.def.xacro" />
+    <xacro_include_definition uri="model://robotiq140/robotiq140.def.xacro" />
+    <xacro_include_definition uri="model://robotiq140/robotiq140_position_controller.def.xacro" />
+    <!--model-->
+    <model name="ur10_robotiq140">
+        <!--model: ur10+robotiq140 -->
+        <xacro_macro name="ur10" parent="__model__"/>
+        <joint name="ur10_robotiq140_joint" type="fixed">
+            <pose relative_to='wrist_3_link'>0 0.0922 0 ${-3.14159/2} ${-3.14159/2} 0</pose>
+            <parent>wrist_3_link</parent>
+            <child>robotiq_arg2f_base_link</child>
+        </joint>
+        <xacro_macro name="robotiq140" parent="ur10_robotiq140_joint"/>
+        <!--controller plugins for ur10-->
+        <xacro_macro name="ur10_position_controller"/>
+        <!--controller plugins for robotiq140-->
+        <xacro_macro name="robotiq140_position_controller"/>
+        <!--joint state publisher-->
+        <plugin filename="ignition-gazebo-joint-state-publisher-system" 
+                name="ignition::gazebo::systems::JointStatePublisher">
+            <joint_name>shoulder_pan_joint</joint_name>
+            <joint_name>shoulder_lift_joint</joint_name>
+            <joint_name>elbow_joint</joint_name>
+            <joint_name>wrist_1_joint</joint_name>
+            <joint_name>wrist_2_joint</joint_name>
+            <joint_name>wrist_3_joint</joint_name>
+            <joint_name>finger_joint</joint_name>
+            <joint_name>left_inner_finger_joint</joint_name>
+            <joint_name>left_inner_knuckle_joint</joint_name>
+            <joint_name>right_inner_knuckle_joint</joint_name>
+            <joint_name>right_outer_knuckle_joint</joint_name>
+            <joint_name>right_inner_finger_joint</joint_name>
+        </plugin>
+    </model>
+</sdf>

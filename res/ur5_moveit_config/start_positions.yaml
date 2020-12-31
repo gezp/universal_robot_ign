@@ -1,0 +1,16 @@
+fake_joint_driver_node:
+  ros__parameters:
+    start_position:
+      joints:
+      - shoulder_pan_joint
+      - shoulder_lift_joint
+      - elbow_joint
+      - wrist_1_joint
+      - wrist_2_joint
+      - wrist_3_joint
+      values:
+        - 0.0
+        - -0.785
+        - 0.0
+        - -2.356
+        - 0.0
