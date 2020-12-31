@@ -22,7 +22,7 @@ def generate_launch_description():
     pkg_ros_ign_gazebo = get_package_share_directory('ros_ign_gazebo')
     pkg_universal_robot_ign = get_package_share_directory('universal_robot_ign')
     #data
-    world_sdf_path=os.path.join(pkg_universal_robot_ign, 'worlds', 'ur10_world.sdf') 
+    world_sdf_path=os.path.join(pkg_universal_robot_ign, 'worlds', 'ur10_robotiq140_world.sdf') 
     ign_config_path=os.path.join(pkg_universal_robot_ign, 'ign', 'gui.config')
     # ignition_simulator launch
     ignition_simulator = IncludeLaunchDescription(
