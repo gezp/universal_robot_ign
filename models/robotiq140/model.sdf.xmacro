@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <sdf version='1.7'>
     <!--include defination-->
-    <xacro_include_definition uri="model://robotiq140/robotiq140.def.xacro" />
-    <xacro_include_definition uri="model://robotiq140/robotiq140_position_controller.def.xacro" />
+    <xacro_include_definition uri="model://robotiq140/robotiq140.def.xmacro" />
+    <xacro_include_definition uri="model://robotiq140/robotiq140_position_controller.def.xmacro" />
     <!--model-->
     <model name="robotiq140">
         <xacro_macro name="robotiq140" parent="__model__"/>
