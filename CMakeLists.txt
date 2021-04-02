@@ -16,6 +16,10 @@ find_package(sensor_msgs REQUIRED)
 find_package(trajectory_msgs REQUIRED)
 
 # ignition package
+# find_package(ignition-plugin1 REQUIRED)
+# set(IGN_PLUGIN_VER 1)
+find_package(ignition-gazebo4 REQUIRED)
+set(IGN_GAZEBO_VER 4)
 find_package(ignition-transport9 REQUIRED)
 set(IGN_TRANSPORT_VER 9)
 find_package(ignition-msgs6 REQUIRED)
@@ -50,6 +54,12 @@ target_link_libraries(joint_position_controller ${PROJECT_NAME})
 add_executable(joint_trajectory_controller nodes/joint_trajectory_controller_node.cpp)
 target_link_libraries(joint_trajectory_controller ${PROJECT_NAME})
 
+# for ignition-gazebo plugin RobotiqController
+add_library(RobotiqController SHARED plugins/robotiq_controller/RobotiqController.cpp)
+
+target_link_libraries(RobotiqController
+  ignition-gazebo${IGN_GAZEBO_VER}::ignition-gazebo${IGN_GAZEBO_VER}
+)
 
 #install
 install( DIRECTORY
@@ -74,6 +84,10 @@ install(TARGETS ${PROJECT_NAME}
 # Install executables
 install(TARGETS joint_state_publisher joint_position_controller joint_trajectory_controller 
   DESTINATION lib/${PROJECT_NAME} 
+)
+
+install(TARGETS RobotiqController 
+    DESTINATION $ENV{HOME}/.ignition/gazebo/plugins
 )
 
 # Install executable scripts

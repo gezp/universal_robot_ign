@@ -1,11 +1,15 @@
 <?xml version="1.0"?>
 <sdf version="1.7">
     <!--include defination-->
-    <xacro_include_definition uri="model://ur10/ur10.def.xacro" />
-    <xacro_include_definition uri="model://ur10/ur10_position_controller.def.xacro" />
+    <xacro_include_definition uri="model://ur10/ur10.def.xmacro" />
+    <xacro_include_definition uri="model://ur10/ur10_position_controller.def.xmacro" />
     <!--model-->
-    <model name="ur10">
+    <model name="ur10" canonical_link="base_link">
         <xacro_macro name="ur10" parent="__model__"/>
+        <joint name="world_ur10_joint" type="fixed">
+            <parent>world</parent>
+            <child>base_link</child>
+        </joint>
         <!--plugins for ur-->
         <xacro_macro name="ur10_position_controller"/>
         <!--joint state publisher-->

@@ -373,6 +373,7 @@
             </axis>
         </joint>
         <link name='right_inner_finger'>
+            
             <pose relative_to='right_inner_finger_joint'>0 0 0 0 -0 0</pose>
             <inertial>
                 <pose>0.0003 0.016008 -0.013695 0 -0 0</pose>

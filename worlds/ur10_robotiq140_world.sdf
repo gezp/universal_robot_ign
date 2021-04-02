@@ -63,15 +63,10 @@
             </link>
         </model>
         <!--ur10 robot-->
-        <model name="ur10">
-            <joint name="world_joint" type="fixed">
-                <parent>world</parent>
-                <child>ur10_robotiq140::base_link</child>
-            </joint>
-            <include>
-                <uri>model://ur10_robotiq140</uri>
-                <pose>0 0 0.1 0 0 0</pose>
-            </include>
-        </model>
+        <include>
+            <name>ur10</name>
+            <uri>model://ur10_robotiq140</uri>
+            <pose>0 0 1.4 0 0 0</pose>
+        </include>
     </world>
 </sdf>
