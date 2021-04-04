@@ -22,7 +22,7 @@ def generate_launch_description():
             os.path.join(pkg_ros_ign_gazebo, 'launch', 'ign_gazebo.launch.py'),
         ),
         launch_arguments={
-            'ign_args': world_sdf_path + ' -v 4 --gui-config ' + ign_config_path,
+            'ign_args': world_sdf_path + ' -v 2 --gui-config ' + ign_config_path,
         }.items()
     )
     # parameter for ur10 controller
@@ -49,7 +49,15 @@ def generate_launch_description():
                             {"ign_cmd_joint_topics": ign_cmd_joint_topics_list},
                            ],
                 output='screen') 
-                
+    # ros->ign, brigde to control Robotiq140 Gripper
+    ros_ign_bridge = Node(package='ros_ign_bridge',
+            executable='parameter_bridge',
+            arguments=["/model/ur10/gripper@std_msgs/msg/Bool]ignition.msgs.Boolean"],
+            remappings=[
+                ("/model/ur10/gripper","/ur10/gripper"),
+            ],
+            output='screen'
+    )
     return LaunchDescription([
-        ignition_simulator,joint_state_publisher,joint_position_controller
+        ignition_simulator,joint_state_publisher,joint_position_controller,ros_ign_bridge
     ])

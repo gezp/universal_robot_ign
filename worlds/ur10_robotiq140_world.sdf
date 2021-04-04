@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <sdf version="1.7">
-    <world name="demo">
+    <world name="default">
         <!-- Physics -->
         <plugin
             filename="libignition-gazebo-physics-system.so"

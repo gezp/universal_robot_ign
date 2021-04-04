@@ -92,7 +92,8 @@ install(TARGETS RobotiqController
 
 # Install executable scripts
 install(PROGRAMS 
-        scripts/pose_goal_test.py
+        scripts/test_pose_goal.py
+        scripts/test_gripper.py
     DESTINATION lib/${PROJECT_NAME})
 
 #environment

@@ -21,9 +21,6 @@
 #include <ignition/gazebo/components/JointVelocity.hh>
 #include <ignition/gazebo/components/JointVelocityCmd.hh>
 #include <ignition/gazebo/components/Pose.hh>
-#include <ignition/math/PID.hh>
-#include <ignition/math/Pose3.hh>
-#include <ignition/math/Quaternion.hh>
 #include <ignition/math/Vector3.hh>
 #include <ignition/plugin/Register.hh>
 #include <ignition/transport/Node.hh>
@@ -48,6 +45,8 @@ class ignition::gazebo::systems::RobotiqControllerPrivate {
     double getJointPosition(ignition::gazebo::EntityComponentManager &_ecm);
     void setJointVelocity(ignition::gazebo::EntityComponentManager &_ecm, double vel);
     bool checkGrasp(ignition::gazebo::EntityComponentManager &_ecm);
+    bool checkCloseGripper(ignition::gazebo::EntityComponentManager &_ecm);
+    bool checkOpenGripper(ignition::gazebo::EntityComponentManager &_ecm);
     void OnCmd(const ignition::msgs::Boolean &_msg);
 
    public:
@@ -94,10 +93,10 @@ void RobotiqController::Configure(const Entity &_entity,
         this->dataPtr->jointEntities.push_back(entity);
     }
     // Subscribe to commands
-    std::string topic{this->dataPtr->model.Name(_ecm) + "/gripper"};
+    std::string topic{"/model/"+this->dataPtr->model.Name(_ecm) + "/gripper"};
     this->dataPtr->node.Subscribe(topic, &RobotiqControllerPrivate::OnCmd, this->dataPtr.get());
     ignmsg << "RobotiqController subscribing to twist messages on [" << topic << "]" << std::endl;
-    this->dataPtr->gripperStatus = GripperStatus::move_close;
+    //this->dataPtr->gripperStatus = GripperStatus::move_close;
 }
 
 void RobotiqController::PreUpdate(const ignition::gazebo::UpdateInfo &_info,
@@ -115,7 +114,7 @@ void RobotiqController::PreUpdate(const ignition::gazebo::UpdateInfo &_info,
     //FSM
     if (gripperStatus == GripperStatus::move_close) {
         //check and set velocity
-        if (this->dataPtr->checkGrasp(_ecm)) {
+        if (this->dataPtr->checkCloseGripper(_ecm)) {
             std::lock_guard<std::mutex> lock(this->dataPtr->statusMutex);
             this->dataPtr->gripperStatus = GripperStatus::keep_close;
             this->dataPtr->setJointVelocity(_ecm, 0);
@@ -124,12 +123,12 @@ void RobotiqController::PreUpdate(const ignition::gazebo::UpdateInfo &_info,
         }
     } else if (gripperStatus == GripperStatus::move_open) {
         //check and set velocity
-        if (this->dataPtr->getJointPosition(_ecm) < 0.001) {
+        if (this->dataPtr->checkOpenGripper(_ecm)) {
             std::lock_guard<std::mutex> lock(this->dataPtr->statusMutex);
             this->dataPtr->gripperStatus = GripperStatus::keep_open;
             this->dataPtr->setJointVelocity(_ecm, 0);
         } else {
-            this->dataPtr->setJointVelocity(_ecm, -0.1);
+            this->dataPtr->setJointVelocity(_ecm, -0.5);
         }
     } else if (gripperStatus == GripperStatus::keep_open || gripperStatus == GripperStatus::keep_close) {
         this->dataPtr->setJointVelocity(_ecm, 0);
@@ -161,7 +160,29 @@ double RobotiqControllerPrivate::getJointPosition(ignition::gazebo::EntityCompon
     return fabs(jointPosComp->Data().at(0));
 }
 
-bool RobotiqControllerPrivate::checkGrasp(ignition::gazebo::EntityComponentManager &_ecm) {
+
+bool RobotiqControllerPrivate::checkOpenGripper(ignition::gazebo::EntityComponentManager &_ecm){
+    auto base = getJointPosition(_ecm);
+    if (base > 0.001) {
+        return false;
+    }
+    double diff = 0;
+    for (size_t i = 0; i < this->jointEntities.size(); i++) {
+        auto jointPosComp = _ecm.Component<components::JointPosition>(this->jointEntities[i]);
+        if (jointPosComp == nullptr) {
+            _ecm.CreateComponent(this->jointEntities[0], components::JointPosition());
+        }
+        auto pos = fabs(jointPosComp->Data().at(0));
+        diff = diff + fabs(pos - base);
+    }
+    if(diff > 0.01){
+        return false;
+    }
+    return true;
+    //return this->getJointPosition(_ecm) < 0.001;
+}
+
+bool RobotiqControllerPrivate::checkCloseGripper(ignition::gazebo::EntityComponentManager &_ecm) {
     auto base = getJointPosition(_ecm);
     if (base > 0.695) {
         ignmsg << "Grasp Nothing!" << std::endl;
@@ -188,7 +209,7 @@ void RobotiqControllerPrivate::OnCmd(const ignition::msgs::Boolean &_msg) {
     //is grasp?
     if (_msg.data()) {
         //to close gripper (grasp it!)
-        if (this->gripperStatus == GripperStatus::keep_open || this->gripperStatus == GripperStatus::move_open) {
+        if (this->gripperStatus == GripperStatus::keep_open) {
             this->gripperStatus = GripperStatus::move_close;
         }
     } else {
