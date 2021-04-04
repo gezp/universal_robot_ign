@@ -6,7 +6,7 @@ It provides SDF models of universal robot for Ignition Gazebo. In addition, it a
 
 ## 1. Usage
 
-#### Install
+### Install
 
 * ROS: foxy
 * Ignition :Dome 
@@ -20,7 +20,7 @@ git clone https://github.com/gezp/universal_robot_ign.git
 colcon build
 ```
 
-####  UR10 moveit2 demo
+###  UR10 moveit2 demo
 
 * use  `moveit2` and `joint_trajectory_controller` to control UR10.
 
@@ -52,7 +52,7 @@ the result:
 
 ![](docs/imgs/ur10_moveit2_demo.gif)
 
-#### UR10 + Robotiq140 Grasp demo
+### UR10 + Robotiq140 Grasp demo
 
 * control gripper Robotiq140  to grasp object and control UR10  based on joint  position.
 
@@ -81,7 +81,7 @@ ros2 launch universal_robot_ign ur10_robotiq140_demo.launch.py
 
 the result:
 
-![](docs/imgs/ur10_position_control_demo.png)
+![](docs/imgs/ur10_robotiq140_grasp_demo.png)
 
 > No Gripper  slipping in Ignition Gazebo! 
 >
