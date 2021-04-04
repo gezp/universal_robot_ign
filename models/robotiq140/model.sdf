@@ -121,8 +121,8 @@
 			<axis>
 				<xyz>1 0 0</xyz>
 				<limit>
-					<lower>-0.8757</lower>
-					<upper>0.8757</upper>
+					<lower>0</lower>
+					<upper>0.7</upper>
 					<effort>1000</effort>
 					<velocity>2</velocity>
 				</limit>
@@ -202,8 +202,8 @@
 			<axis>
 				<xyz>1 0 0</xyz>
 				<limit>
-					<lower>-0.8757</lower>
-					<upper>0.8757</upper>
+					<lower>-0.7</lower>
+					<upper>0</upper>
 					<effort>1000</effort>
 					<velocity>2</velocity>
 				</limit>
@@ -254,8 +254,8 @@
 			<axis>
 				<xyz>1 0 0</xyz>
 				<limit>
-					<lower>-0.8757</lower>
-					<upper>0.8757</upper>
+					<lower>-0.7</lower>
+					<upper>0</upper>
 					<effort>1000</effort>
 					<velocity>2</velocity>
 				</limit>
@@ -306,8 +306,8 @@
 			<axis>
 				<xyz>1 0 0</xyz>
 				<limit>
-					<lower>-0.725</lower>
-					<upper>0.725</upper>
+					<lower>-0.7</lower>
+					<upper>0</upper>
 					<effort>1000</effort>
 					<velocity>2</velocity>
 				</limit>
@@ -379,8 +379,8 @@
 			<axis>
 				<xyz>1 0 0</xyz>
 				<limit>
-					<lower>-0.8757</lower>
-					<upper>0.8757</upper>
+					<lower>0</lower>
+					<upper>0.7</upper>
 					<effort>1000</effort>
 					<velocity>2</velocity>
 				</limit>
@@ -456,15 +456,15 @@
 		<!--controller plugins for robotiq140-->
 		<plugin filename="ignition-gazebo-joint-position-controller-system" name="ignition::gazebo::systems::JointPositionController">
 			<joint_name>finger_joint</joint_name>
-			<p_gain>5.0</p_gain>
+			<p_gain>10.0</p_gain>
 			<i_gain>0.0</i_gain>
-			<d_gain>0.01</d_gain>
+			<d_gain>0.0</d_gain>
 			<i_max>-1.0</i_max>
 			<i_min>1.0</i_min>
 		</plugin>
 		<plugin filename="ignition-gazebo-joint-position-controller-system" name="ignition::gazebo::systems::JointPositionController">
 			<joint_name>left_inner_finger_joint</joint_name>
-			<p_gain>5.0</p_gain>
+			<p_gain>0.5</p_gain>
 			<i_gain>0.0</i_gain>
 			<d_gain>0.01</d_gain>
 			<i_max>-1.0</i_max>
@@ -472,7 +472,7 @@
 		</plugin>
 		<plugin filename="ignition-gazebo-joint-position-controller-system" name="ignition::gazebo::systems::JointPositionController">
 			<joint_name>left_inner_knuckle_joint</joint_name>
-			<p_gain>5.0</p_gain>
+			<p_gain>0.5</p_gain>
 			<i_gain>0.0</i_gain>
 			<d_gain>0.01</d_gain>
 			<i_max>-1.0</i_max>
@@ -480,7 +480,7 @@
 		</plugin>
 		<plugin filename="ignition-gazebo-joint-position-controller-system" name="ignition::gazebo::systems::JointPositionController">
 			<joint_name>right_inner_knuckle_joint</joint_name>
-			<p_gain>5.0</p_gain>
+			<p_gain>0.5</p_gain>
 			<i_gain>0.0</i_gain>
 			<d_gain>0.01</d_gain>
 			<i_max>-1.0</i_max>
@@ -488,15 +488,15 @@
 		</plugin>
 		<plugin filename="ignition-gazebo-joint-position-controller-system" name="ignition::gazebo::systems::JointPositionController">
 			<joint_name>right_outer_knuckle_joint</joint_name>
-			<p_gain>5.0</p_gain>
+			<p_gain>10.0</p_gain>
 			<i_gain>0.0</i_gain>
-			<d_gain>0.01</d_gain>
+			<d_gain>0.0</d_gain>
 			<i_max>-1.0</i_max>
 			<i_min>1.0</i_min>
 		</plugin>
 		<plugin filename="ignition-gazebo-joint-position-controller-system" name="ignition::gazebo::systems::JointPositionController">
 			<joint_name>right_inner_finger_joint</joint_name>
-			<p_gain>5.0</p_gain>
+			<p_gain>0.5</p_gain>
 			<i_gain>0.0</i_gain>
 			<d_gain>0.01</d_gain>
 			<i_max>-1.0</i_max>
