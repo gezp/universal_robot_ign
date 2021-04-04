@@ -30,14 +30,14 @@ def generate_launch_description():
                     "wrist_1_joint","wrist_2_joint","wrist_3_joint"]
     ign_cmd_joint_topics_list=[]
     for joint_name in joint_names_list:
-        ign_cmd_joint_topics_list.append("/model/ur10/joint/ur10::%s/0/cmd_pos"%joint_name)
+        ign_cmd_joint_topics_list.append("/model/ur10/joint/%s/0/cmd_pos"%joint_name)
     
     # ros<-ign, joint state publisher for ur10
     joint_state_publisher=Node(package='universal_robot_ign', 
                 executable='joint_state_publisher',
                 name="ur10_joint_state_publisher",
                 parameters=[{"joint_names": joint_names_list},
-                            {"ign_joint_states_topic": "/world/demo/model/ur10/joint_state"},
+                            {"ign_joint_states_topic": "/world/default/model/ur10/joint_state"},
                             {"ign_joint_idxs": [0,1,2,3,4,5]},
                         ],
                 output='screen') 

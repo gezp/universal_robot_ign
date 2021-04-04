@@ -37,7 +37,7 @@ def generate_launch_description():
                 executable='joint_state_publisher',
                 name="ur10_joint_state_publisher",
                 parameters=[{"joint_names": joint_names_list},
-                            {"ign_joint_states_topic": "/world/demo/model/ur10/joint_state"},
+                            {"ign_joint_states_topic": "/world/default/model/ur10/joint_state"},
                             {"ign_joint_idxs": [0,1,2,3,4,5]},
                         ],
                 output='screen') 
@@ -49,7 +49,7 @@ def generate_launch_description():
                             {"ign_cmd_joint_topics": ign_cmd_joint_topics_list},
                            ],
                 output='screen') 
-    # ros->ign, brigde to control Robotiq140 Gripper
+    # ros->ign, ign bridge to control Robotiq140 Gripper
     ros_ign_bridge = Node(package='ros_ign_bridge',
             executable='parameter_bridge',
             arguments=["/model/ur10/gripper@std_msgs/msg/Bool]ignition.msgs.Boolean"],

@@ -1,8 +1,8 @@
 # universal_robot_ign
 
- `universal_robot_ign`  : run universal robot  in Ignition Gazebo simulator . 
+ `universal_robot_ign`  : Run universal robot  in Ignition Gazebo simulator . 
 
-It provides SDF models of universal robot for Ignition Gazebo. In addition, it also provides a moveit2 application demo. 
+It provides SDF models of universal robot for Ignition Gazebo. In addition, it also provides a moveit2 application demo and simple  grasp demo with Gripper Robotiq140 . 
 
 ## 1. Usage
 
@@ -20,41 +20,19 @@ git clone https://github.com/gezp/universal_robot_ign.git
 colcon build
 ```
 
-#### control joint position demo
-
-* use `joint_position_controller` to control UR10.
-
-launch Ignition Gazebo simluator for UR10 
-
-```bash
-ros2 launch universal_robot_ign ur10_ign.launch.py 
-```
-
-*  `ur10_ign` uses  `joint_position_controller`
-
-launch joint state publisher GUI for publishing cmd.
-
-```bash
-ros2 launch universal_robot_ign ur10_position_control_demo.launch.py 
-```
-
-the result:
-
-![](docs/imgs/ur10_position_control_demo.png)
-
-####  moveit2 demo
+####  UR10 moveit2 demo
 
 * use  `moveit2` and `joint_trajectory_controller` to control UR10.
 
 > moveit2 should be installed: [MoveIt 2 Source Build - Linux](https://moveit.ros.org/install-moveit2/source/)
 
-launch Ignition Gazebo simluator for UR10 
+launch Ignition Gazebo simulator for UR10 
 
 ```bash
-ros2 launch universal_robot_ign ur10_ign2.launch.py 
+ros2 launch universal_robot_ign ur10_ign.launch.py 
 ```
 
-*  `ur10_ign2` uses  `joint_trajectory_controller`
+*  `ur10_ign` uses  `joint_trajectory_controller`
 
 launch moveit2 `move_group` action server for UR10.
 
@@ -65,7 +43,7 @@ ros2 launch universal_robot_ign ur10_moveit2_demo.launch.py
 run moveit2  client node, plan to goal
 
 ```bash
-ros2 run universal_robot_ign pose_goal_test.py
+ros2 run universal_robot_ign test_pose_goal.py
 ```
 
 * start position <-> goal pose:  `[-0.0, 0.4, 0.6, 0.0, 0.0, 0.0]`  (loop)
@@ -73,6 +51,41 @@ ros2 run universal_robot_ign pose_goal_test.py
 the result:
 
 ![](docs/imgs/ur10_moveit2_demo.gif)
+
+#### UR10 + Robotiq140 Grasp demo
+
+* control gripper Robotiq140  to grasp object and control UR10  based on joint  position.
+
+launch Ignition Gazebo simulator for UR10  + Robotiq140
+
+```bash
+ros2 launch universal_robot_ign ur10_robotiq140_ign.launch.py 
+```
+
+*  use  `joint_position_controller` to control UR10.
+*  use  Ignition plugin `RobotiqController` to control Robotiq140.
+
+run gripper test node to grasp stick model by closing gripper 
+
+```bash
+ros2 run universal_robot_ign test_gripper.py 
+#1 : close gripper to grasp.
+#0 : open gripper.
+```
+
+launch joint state publisher GUI to control UR10 based on joint position
+
+```bash
+ros2 launch universal_robot_ign ur10_robotiq140_demo.launch.py
+```
+
+the result:
+
+![](docs/imgs/ur10_position_control_demo.png)
+
+> No Gripper  slipping in Ignition Gazebo! 
+>
+> * There is Gripper Slipping Problem on Gazebo-classic which need use plugin to add fxied joint between object and gripper when grasp.
 
 ## 2. models
 
@@ -87,7 +100,9 @@ the package contains  robotic arm `universal_robot` SDF models (`ur3`,`ur5`,`ur1
 
 **Controller Struture**
 
-Ignition Controller
+![](docs/imgs/controller_struture.png)
+
+**Ignition Controller**
 
 * Ignition plugin `ignition-gazebo-joint-position-controller-system`  is used to control  joints of robotic arm .
 * The position PID parameter should be set in plugins.
@@ -96,7 +111,7 @@ Ignition Controller
 >
 > * The PID parameter of Ignition joint position controller plugin is set roughly ,so the performance of control is not well, you can modify PID parameter by modifying SDF file of model.
 
-ROS controller
+**ROS controller**
 
 * `joint_position_controller` 
   *  receive ROS msg `sensor_msgs::msg::JointState` and publish target position `ignition::msgs::Double` for each joint (control based on position pid) . 

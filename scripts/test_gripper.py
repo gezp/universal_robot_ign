@@ -5,8 +5,8 @@ import rclpy
 from std_msgs.msg import Bool
 
 input_msg='''
-#1 : close gripper to grasp
-#0 : open gripper
+#1 : close gripper to grasp.
+#0 : open gripper.
 input:
 '''
 

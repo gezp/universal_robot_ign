@@ -92,6 +92,7 @@ install(TARGETS RobotiqController
 
 # Install executable scripts
 install(PROGRAMS 
+        scripts/moveit2.py
         scripts/test_pose_goal.py
         scripts/test_gripper.py
     DESTINATION lib/${PROJECT_NAME})
