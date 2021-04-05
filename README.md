@@ -96,7 +96,7 @@ the package contains  robotic arm `universal_robot` SDF models (`ur3`,`ur5`,`ur1
 
 ![](docs/imgs/ur10_robotiq140.png)
 
-## 3. Controller
+## 3. UR Controller
 
 **Controller Struture**
 
