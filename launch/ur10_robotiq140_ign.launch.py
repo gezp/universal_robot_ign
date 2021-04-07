@@ -55,7 +55,7 @@ def generate_launch_description():
             executable='parameter_bridge',
             arguments=["/model/ur10/gripper@std_msgs/msg/Bool]ignition.msgs.Boolean"],
             remappings=[
-                ("/model/ur10/gripper","/ur10/gripper"),
+                ("/model/ur10/gripper","/gripper"),
             ],
             output='screen'
     )

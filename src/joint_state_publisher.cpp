@@ -58,7 +58,7 @@ void JointStatePublisher::jointStateTimerCb()
     //create  JointState msg
     sensor_msgs::msg::JointState ros_msg;
     ros_msg.header.stamp = rclcpp::Clock().now();
-    ros_msg.header.frame_id = "robot";
+    ros_msg.header.frame_id = current_joint_msg_.name();
     for (size_t i = 0; i < joint_names_.size(); ++i) {
         ros_msg.name.push_back(joint_names_[i]);
         auto idx = joint_idxs_map_[i];

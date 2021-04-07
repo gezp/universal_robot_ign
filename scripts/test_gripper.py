@@ -13,7 +13,7 @@ input:
 def main():
     rclpy.init()
     node = rclpy.create_node('gripper_test')
-    pub = node.create_publisher(Bool, '/ur10/gripper', 10)
+    pub = node.create_publisher(Bool, '/gripper', 10)
     while(rclpy.ok()):
         # start detect
         mode = input(input_msg)

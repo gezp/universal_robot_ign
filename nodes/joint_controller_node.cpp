@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
         joint_names, "set_joint_trajectory", ign_joint_topics ,update_rate);
     // create controller 
     auto joint_position_controller = std::make_shared<universal_robot_ign::JointPositionController>(ros_node,
-        joint_names, "set_joint_states", ign_joint_topics);
+        joint_names, "set_joint_state", ign_joint_topics);
     // run node until it's exited
     rclcpp::spin(ros_node);
     //clean up

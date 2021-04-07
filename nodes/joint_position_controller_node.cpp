@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
     ign_joint_topics = ros_node->get_parameter("ign_joint_topics").as_string_array();
     // create controller 
     auto joint_controller = std::make_shared<universal_robot_ign::JointPositionController>(ros_node,
-        joint_names, "set_joint_states", ign_joint_topics);
+        joint_names, "set_joint_state", ign_joint_topics);
     // run node until it's exited
     rclcpp::spin(ros_node);
     //clean up
