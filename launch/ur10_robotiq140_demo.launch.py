@@ -19,7 +19,7 @@ def generate_launch_description():
             executable='joint_state_publisher_gui',
             name="joint_state_publisher_gui",
             arguments=[ urdf ],
-            remappings=[('/joint_states', '/cmd_joint_states')],
+            remappings=[('/joint_states', '/set_joint_states')],
             output='screen') 
     
     return LaunchDescription([

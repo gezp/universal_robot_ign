@@ -26,10 +26,8 @@ int main(int argc, char* argv[])
     ros_node->declare_parameter("joint_names");
     ros_node->declare_parameter("ign_joint_states_topic");
     ros_node->declare_parameter("ign_joint_idxs");
-    ros_node->declare_parameter("joint_states_topic", "joint_states");
     ros_node->declare_parameter("rate", 30);
     joint_names = ros_node->get_parameter("joint_names").as_string_array();
-    joint_states_topic = ros_node->get_parameter("joint_states_topic").as_string();
     ign_joint_states_topic = ros_node->get_parameter("ign_joint_states_topic").as_string();
     std::vector<int64_t> ign_joint_idxs_64 = ros_node->get_parameter("ign_joint_idxs").as_integer_array();
     update_rate = ros_node->get_parameter("rate").as_int();
@@ -44,7 +42,7 @@ int main(int argc, char* argv[])
     }
     // create publisher
     auto joint_publisher = std::make_shared<universal_robot_ign::JointStatePublisher>(ros_node,
-        joint_names, joint_states_topic, ign_joint_states_topic, ign_joint_idxs ,update_rate);
+        joint_names, "joint_states", ign_joint_states_topic, ign_joint_idxs ,update_rate);
     // run node until it's exited
     rclcpp::spin(ros_node);
     //clean up

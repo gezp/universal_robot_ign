@@ -28,9 +28,9 @@ def generate_launch_description():
     # parameter for ur10 controller
     joint_names_list=["shoulder_pan_joint","shoulder_lift_joint","elbow_joint",
                     "wrist_1_joint","wrist_2_joint","wrist_3_joint"]
-    ign_cmd_joint_topics_list=[]
+    ign_joint_topics_list=[]
     for joint_name in joint_names_list:
-        ign_cmd_joint_topics_list.append("/model/ur10/joint/%s/0/cmd_pos"%joint_name)
+        ign_joint_topics_list.append("/model/ur10/joint/%s/0/cmd_pos"%joint_name)
     
     # ros<-ign, joint state publisher for ur10
     joint_state_publisher=Node(package='universal_robot_ign', 
@@ -42,15 +42,15 @@ def generate_launch_description():
                         ],
                 output='screen') 
     #  ros->ign,  joint controller for ur10
-    joint_trajectory_controller=Node(package='universal_robot_ign', 
-                executable='joint_trajectory_controller',
-                name="ur10_joint_trajectory_controller",
+    joint_controller=Node(package='universal_robot_ign', 
+                executable='joint_controller',
+                name="ur10_joint_controller",
                 parameters=[{"joint_names": joint_names_list},
-                            {"ign_cmd_joint_topics": ign_cmd_joint_topics_list},
+                            {"ign_joint_topics": ign_joint_topics_list},
                             {"rate":200},
                            ],
                 output='screen') 
                 
     return LaunchDescription([
-        ignition_simulator,joint_state_publisher,joint_trajectory_controller
+        ignition_simulator,joint_state_publisher,joint_controller
     ])

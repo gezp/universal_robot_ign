@@ -19,17 +19,15 @@ int main(int argc, char* argv[])
     // variables
     std::vector<std::string> joint_names;
     std::string cmd_joint_states_topic;
-    std::vector<std::string> ign_cmd_joint_topics;
+    std::vector<std::string> ign_joint_topics;
     // parameters
     ros_node->declare_parameter("joint_names");
-    ros_node->declare_parameter("cmd_joint_states_topic","cmd_joint_states");
-    ros_node->declare_parameter("ign_cmd_joint_topics");
+    ros_node->declare_parameter("ign_joint_topics");
     joint_names = ros_node->get_parameter("joint_names").as_string_array();
-    cmd_joint_states_topic = ros_node->get_parameter("cmd_joint_states_topic").as_string();
-    ign_cmd_joint_topics = ros_node->get_parameter("ign_cmd_joint_topics").as_string_array();
+    ign_joint_topics = ros_node->get_parameter("ign_joint_topics").as_string_array();
     // create controller 
     auto joint_controller = std::make_shared<universal_robot_ign::JointPositionController>(ros_node,
-        joint_names, cmd_joint_states_topic, ign_cmd_joint_topics);
+        joint_names, "set_joint_states", ign_joint_topics);
     // run node until it's exited
     rclcpp::spin(ros_node);
     //clean up

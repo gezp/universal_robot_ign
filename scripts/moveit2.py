@@ -65,7 +65,7 @@ class MoveIt2Interface(Node):
 
         # Publisher of trajectories
         self.joint_trajectory_pub = self.create_publisher(JointTrajectory,
-                                                          "cmd_joint_trajectory", 1)
+                                                          "set_joint_trajectory", 1)
 
         # Subscriber of current joint states
         self.joint_state = JointState()

@@ -54,6 +54,9 @@ target_link_libraries(joint_position_controller ${PROJECT_NAME})
 add_executable(joint_trajectory_controller nodes/joint_trajectory_controller_node.cpp)
 target_link_libraries(joint_trajectory_controller ${PROJECT_NAME})
 
+add_executable(joint_controller nodes/joint_controller_node.cpp)
+target_link_libraries(joint_controller ${PROJECT_NAME})
+
 # for ignition-gazebo plugin RobotiqController
 add_library(RobotiqController SHARED plugins/robotiq_controller/RobotiqController.cpp)
 
@@ -82,7 +85,7 @@ install(TARGETS ${PROJECT_NAME}
 )
 
 # Install executables
-install(TARGETS joint_state_publisher joint_position_controller joint_trajectory_controller 
+install(TARGETS joint_state_publisher joint_position_controller joint_trajectory_controller joint_controller
   DESTINATION lib/${PROJECT_NAME} 
 )
 
