@@ -32,7 +32,7 @@ launch Ignition Gazebo simulator for UR10
 ros2 launch universal_robot_ign ur10_ign.launch.py 
 ```
 
-*  `ur10_ign` uses  `joint_trajectory_controller`
+* `joint_trajectory_controller` will be used in this demo
 
 launch moveit2 `move_group` action server for UR10.
 
@@ -62,7 +62,6 @@ launch Ignition Gazebo simulator for UR10  + Robotiq140
 ros2 launch universal_robot_ign ur10_robotiq140_ign.launch.py 
 ```
 
-*  use  `joint_position_controller` to control UR10.
 *  use  Ignition plugin `RobotiqController` to control Robotiq140.
 
 run gripper test node to grasp stick model by closing gripper 
@@ -79,6 +78,7 @@ launch joint state publisher GUI to control UR10 based on joint position
 ros2 launch universal_robot_ign ur10_robotiq140_demo.launch.py
 ```
 
+*  `joint_position_controller` will be used in this demo
 the result:
 
 ![](docs/imgs/ur10_robotiq140_grasp_demo.png)
