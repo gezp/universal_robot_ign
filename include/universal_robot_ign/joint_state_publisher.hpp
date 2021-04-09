@@ -15,6 +15,7 @@
 #include <mutex>
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/joint_state.hpp>
+#include <map>
 
 namespace universal_robot_ign {
 
@@ -24,7 +25,6 @@ public:
         const std::vector<std::string>& joint_names,
         const std::string& ros_topic, 
         const std::string& ign_topic,
-        const std::vector<int>& joint_idxs_map,
         const unsigned int update_rate);
     ~JointStatePublisher() {};
 
@@ -41,10 +41,10 @@ private:
     rclcpp::TimerBase::SharedPtr joint_state_timer_;
     // joint names and map
     std::vector<std::string> joint_names_;
+    std::map<std::string,int> joint_names_map_;
     //joint state info recieved form Ignition
-    ignition::msgs::Model current_joint_msg_;
-    std::vector<int> joint_idxs_map_;
-    int max_ign_joint_idx_;
+    ignition::msgs::Model current_ign_joint_msg_;
+    sensor_msgs::msg::JointState current_joint_msg_;
     std::mutex current_joint_msg_mut_;
 };
 

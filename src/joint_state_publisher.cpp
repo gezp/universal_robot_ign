@@ -17,24 +17,15 @@ JointStatePublisher::JointStatePublisher(const rclcpp::Node::SharedPtr& nh,
         const std::vector<std::string>& joint_names,
         const std::string& ros_topic, 
         const std::string& ign_topic,
-        const std::vector<int>& joint_idxs_map,
         const unsigned int update_rate)
 {
     // ROS and Ignition node
     nh_ = nh;
     ign_node_ = std::make_shared<ignition::transport::Node>();
-    //check
-    if (joint_names.size() != joint_idxs_map.size()) {
-        std::cout << "[JointStatePublisher ERROR]:the size of arrays are not matched!" << std::endl;
-        return;
-    }
+
     joint_names_ = joint_names;
-    joint_idxs_map_ = joint_idxs_map;
-    max_ign_joint_idx_ = 0;
-    for (size_t i = 0; i < joint_idxs_map_.size(); i++) {
-        if (joint_idxs_map_[i] > max_ign_joint_idx_) {
-            max_ign_joint_idx_ = joint_idxs_map_[i];
-        }
+    for (size_t i = 0; i < joint_names_.size(); i++) {
+        joint_names_map_[joint_names_[i]]=i;
     }
     //create ros pub and sub
     ros_joint_state_pub_ = nh_->create_publisher<sensor_msgs::msg::JointState>(ros_topic, 10);
@@ -44,11 +35,10 @@ JointStatePublisher::JointStatePublisher(const rclcpp::Node::SharedPtr& nh,
     ign_node_->Subscribe(ign_topic, &JointStatePublisher::ignJointStateCb, this);
     //init current_joint_msg_
     for (auto i = 0u; i < joint_names_.size(); ++i) {
-        auto newJoint = current_joint_msg_.add_joint();
-        newJoint->set_name(joint_names_[i]);
-        newJoint->mutable_axis1()->set_position(0);
-        newJoint->mutable_axis1()->set_velocity(0);
-        newJoint->mutable_axis1()->set_force(0);
+        current_joint_msg_.name.push_back(joint_names_[i]);
+        current_joint_msg_.position.push_back(0);
+        current_joint_msg_.velocity.push_back(0);
+        current_joint_msg_.effort.push_back(0);
     }
 }
 
@@ -56,26 +46,21 @@ void JointStatePublisher::jointStateTimerCb()
 {
     std::lock_guard<std::mutex> lock(current_joint_msg_mut_);
     //create  JointState msg
-    sensor_msgs::msg::JointState ros_msg;
-    ros_msg.header.stamp = rclcpp::Clock().now();
-    ros_msg.header.frame_id = current_joint_msg_.name();
-    for (size_t i = 0; i < joint_names_.size(); ++i) {
-        ros_msg.name.push_back(joint_names_[i]);
-        auto idx = joint_idxs_map_[i];
-        ros_msg.position.push_back(current_joint_msg_.joint(idx).axis1().position());
-        ros_msg.velocity.push_back(current_joint_msg_.joint(idx).axis1().velocity());
-        ros_msg.effort.push_back(current_joint_msg_.joint(idx).axis1().force());
+    current_joint_msg_.header.stamp = rclcpp::Clock().now();
+    current_joint_msg_.header.frame_id = current_ign_joint_msg_.name();
+    for(int i = 0; i < current_ign_joint_msg_.joint_size () ; ++i){
+        if (joint_names_map_.find(current_ign_joint_msg_.joint(i).name()) != joint_names_map_.end()) {
+            int idx=joint_names_map_[current_ign_joint_msg_.joint(i).name()];
+            current_joint_msg_.position[idx]=current_ign_joint_msg_.joint(i).axis1().position();
+            current_joint_msg_.velocity[idx]=current_ign_joint_msg_.joint(i).axis1().velocity();
+            current_joint_msg_.effort[idx]=current_ign_joint_msg_.joint(i).axis1().force();
+        }
     }
-    ros_joint_state_pub_->publish(ros_msg);
+    ros_joint_state_pub_->publish(current_joint_msg_);
 }
 
 void JointStatePublisher::ignJointStateCb(const ignition::msgs::Model& msg)
 {
     std::lock_guard<std::mutex> lock(current_joint_msg_mut_);
-    //check
-    if (msg.joint_size() <= max_ign_joint_idx_) {
-        //std::cout << "the size of joint state from ignition is less idx of joint" << std::endl;
-        return;
-    }
-    current_joint_msg_ = msg;
+    current_ign_joint_msg_ = msg;
 }

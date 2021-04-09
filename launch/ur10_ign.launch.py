@@ -37,8 +37,7 @@ def generate_launch_description():
                 executable='joint_state_publisher',
                 name="ur10_joint_state_publisher",
                 parameters=[{"joint_names": joint_names_list},
-                            {"ign_joint_states_topic": "/world/default/model/ur10/joint_state"},
-                            {"ign_joint_idxs": [0,1,2,3,4,5]},
+                            {"ign_topic": "/world/default/model/ur10/joint_state"},
                         ],
                 output='screen') 
     #  ros->ign,  joint controller for ur10
