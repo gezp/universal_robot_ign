@@ -44,16 +44,21 @@ JointStatePublisher::JointStatePublisher(const rclcpp::Node::SharedPtr& nh,
 
 void JointStatePublisher::jointStateTimerCb()
 {
-    std::lock_guard<std::mutex> lock(current_joint_msg_mut_);
+    ignition::msgs::Model model_msg;
+    {
+        std::lock_guard<std::mutex> lock(current_joint_msg_mut_);
+        model_msg=current_ign_joint_msg_;
+    }
+    
     //create  JointState msg
     current_joint_msg_.header.stamp = rclcpp::Clock().now();
-    current_joint_msg_.header.frame_id = current_ign_joint_msg_.name();
-    for(int i = 0; i < current_ign_joint_msg_.joint_size () ; ++i){
-        if (joint_names_map_.find(current_ign_joint_msg_.joint(i).name()) != joint_names_map_.end()) {
-            int idx=joint_names_map_[current_ign_joint_msg_.joint(i).name()];
-            current_joint_msg_.position[idx]=current_ign_joint_msg_.joint(i).axis1().position();
-            current_joint_msg_.velocity[idx]=current_ign_joint_msg_.joint(i).axis1().velocity();
-            current_joint_msg_.effort[idx]=current_ign_joint_msg_.joint(i).axis1().force();
+    current_joint_msg_.header.frame_id = model_msg.name();
+    for(int i = 0; i < model_msg.joint_size () ; ++i){
+        if (joint_names_map_.find(model_msg.joint(i).name()) != joint_names_map_.end()) {
+            int idx=joint_names_map_[model_msg.joint(i).name()];
+            current_joint_msg_.position[idx]=model_msg.joint(i).axis1().position();
+            current_joint_msg_.velocity[idx]=model_msg.joint(i).axis1().velocity();
+            current_joint_msg_.effort[idx]=model_msg.joint(i).axis1().force();
         }
     }
     ros_joint_state_pub_->publish(current_joint_msg_);

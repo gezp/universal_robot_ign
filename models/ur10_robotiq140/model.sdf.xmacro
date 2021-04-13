@@ -4,7 +4,6 @@
     <xacro_include_definition uri="model://ur10/ur10.def.xmacro" />
     <xacro_include_definition uri="model://ur10/ur10_position_controller.def.xmacro" />
     <xacro_include_definition uri="model://robotiq140/robotiq140.def.xmacro" />
-    <xacro_include_definition uri="model://robotiq140/robotiq140_position_controller.def.xmacro" />
     <!--model-->
     <model name="ur10_robotiq140">
         <!--model: ur10+robotiq140 -->
@@ -24,6 +23,8 @@
         <!--controller plugins for robotiq140-->
         <plugin filename="RobotiqController" 
                 name="ignition::gazebo::systems::RobotiqController">
+            <fixed>false</fixed>
+            <vel_scale>1.0</vel_scale>
         </plugin>        
         <!--joint state publisher-->
         <plugin filename="ignition-gazebo-joint-state-publisher-system" 
@@ -35,11 +36,6 @@
             <joint_name>wrist_2_joint</joint_name>
             <joint_name>wrist_3_joint</joint_name>
             <joint_name>finger_joint</joint_name>
-            <joint_name>left_inner_finger_joint</joint_name>
-            <joint_name>left_inner_knuckle_joint</joint_name>
-            <joint_name>right_inner_knuckle_joint</joint_name>
-            <joint_name>right_outer_knuckle_joint</joint_name>
-            <joint_name>right_inner_finger_joint</joint_name>
         </plugin>
     </model>
 </sdf>

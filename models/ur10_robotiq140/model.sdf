@@ -492,10 +492,15 @@
 				<surface>
 					<friction>
 						<ode>
-							<mu>1.05</mu>
-							<mu2>1.05</mu2>
+							<mu>1000</mu>
+							<mu2>1000</mu2>
 						</ode>
 					</friction>
+					<contact>
+						<ode>
+							<min_depth>0.003</min_depth>
+						</ode>
+					</contact>
 				</surface>
 			</collision>
 			<visual name="left_inner_finger_visual">
@@ -750,10 +755,15 @@
 				<surface>
 					<friction>
 						<ode>
-							<mu>1.05</mu>
-							<mu2>1.05</mu2>
+							<mu>1000</mu>
+							<mu2>1000</mu2>
 						</ode>
 					</friction>
+					<contact>
+						<ode>
+							<min_depth>0.003</min_depth>
+						</ode>
+					</contact>
 				</surface>
 			</collision>
 			<visual name="right_inner_finger_visual">
@@ -842,7 +852,9 @@
 		</plugin>
 		<!--controller plugins for robotiq140-->
 		<plugin filename="RobotiqController" name="ignition::gazebo::systems::RobotiqController">
-        </plugin>
+			<fixed>false</fixed>
+			<vel_scale>1.0</vel_scale>
+		</plugin>
 		<!--joint state publisher-->
 		<plugin filename="ignition-gazebo-joint-state-publisher-system" name="ignition::gazebo::systems::JointStatePublisher">
 			<joint_name>shoulder_pan_joint</joint_name>
@@ -852,11 +864,6 @@
 			<joint_name>wrist_2_joint</joint_name>
 			<joint_name>wrist_3_joint</joint_name>
 			<joint_name>finger_joint</joint_name>
-			<joint_name>left_inner_finger_joint</joint_name>
-			<joint_name>left_inner_knuckle_joint</joint_name>
-			<joint_name>right_inner_knuckle_joint</joint_name>
-			<joint_name>right_outer_knuckle_joint</joint_name>
-			<joint_name>right_inner_finger_joint</joint_name>
 		</plugin>
 	</model>
 </sdf>

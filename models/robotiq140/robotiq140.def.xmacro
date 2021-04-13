@@ -19,10 +19,15 @@
         <surface>
             <friction>
                 <ode>
-                    <mu>1.05</mu>
-                    <mu2>1.05</mu2>
+                    <mu>1000</mu>
+                    <mu2>1000</mu2>
                 </ode>
             </friction>
+            <contact>
+				<ode>
+					<min_depth>0.003</min_depth>
+				</ode>
+			</contact>
         </surface>
     </xacro_define_macro>
     <!--model definition-->
