@@ -83,10 +83,6 @@ the result:
 
 ![](docs/imgs/ur10_robotiq140_grasp_demo.png)
 
-> No Gripper  slipping in Ignition Gazebo! 
->
-> * There is Gripper Slipping Problem on Gazebo-classic which need use plugin to add fxied joint between object and gripper when grasp.
-
 ## 2. models
 
 the package contains  robotic arm `universal_robot` SDF models (`ur3`,`ur5`,`ur10`) , a robotic gripper SDF models (`robotiq140 `) ,and a combination model `ur10_robotiq140` .
@@ -121,7 +117,54 @@ the package contains  robotic arm `universal_robot` SDF models (`ur3`,`ur5`,`ur1
   * use interpolation based on time for joint trajectory and  keep publishing target position according to current time until the last trajectory point is processed .
   * this is not the most efficient way, but easy to Implement (it can work well with moveit2)
 
-## 4. Maintainer  and  License
+## 4.Robotiq Ignition Controller
+
+Ignition  Plugin `RobotiqController`  is created to control Robotiq  Gripper(2 fingers gripper) . you can use in SDF like this.
+
+**Usage**
+
+Add plugin In SDF
+
+```xml
+<plugin filename="RobotiqController" name="ignition::gazebo::systems::RobotiqController">
+	<gripper_name>gripper</gripper_name>
+    <fixed>false</fixed>
+    <vel_scale>1.0</vel_scale>
+</plugin>    
+```
+
+* some code snippets  like joint name of model's joint are hardcoded  In Plugin `RobotiqController` 
+* the tag `fixed` with `ture`  will make `RobotiqController`  use `detachable joint ` to  fix  grasped object with gripper.
+
+> `RobotiqController`  can be modified to get parameters from SDF which  can work for genenral 2 fingers gripper,however, it is trivial so that I have no plan to implement this function currently.
+
+Create Node  `ros_ign_bridge`  to transfer Msg from ROS2 to Ignition
+
+```python
+ros_ign_bridge = Node(package='ros_ign_bridge',executable='parameter_bridge',
+	arguments=["/model/ur10/gripper@std_msgs/msg/Bool]ignition.msgs.Boolean"],
+	remappings=[("/model/ur10/gripper","/gripper"),],
+    output='screen'
+)
+```
+
+Publish ROS2 msg
+
+* use `scripts/test_gripper.py`
+
+**Slipping Problem**
+
+There is Gripper Slipping Problem on Gazebo-classic which need use plugin to add fixed joint between object and gripper when grasp.   
+
+Ignition Gazebo performs better than Gazebo-classic on the Grasp Task, but also exists some problem in some situations.
+
+* it can grasp box tightly In Ignition Gazebo
+  * it performs better than Gazebo-classic.
+* it can't grasp sphere In Ignition Gazebo
+  * Because the size of contact area is so small that the friction is not enough to hold grasped object, and property `max_depth`  of `contact`  is not implemented In Ignition Gazebo currently.
+  * In this situation, a fixed joint is needed to fix object with gripper, you can modified SDF and set Tag `fixed` with `ture`.
+
+## 5. Maintainer  and  License
 
 Maintainer : Zhenpeng Ge, [zhenpeng.ge@qq.com](mailto:zhenpeng.ge@qq.com)
 
