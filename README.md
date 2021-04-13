@@ -119,7 +119,7 @@ the package contains  robotic arm `universal_robot` SDF models (`ur3`,`ur5`,`ur1
 
 ## 4.Robotiq Ignition Controller
 
-Ignition  Plugin `RobotiqController`  is created to control Robotiq  Gripper(2 fingers gripper) . you can use in SDF like this.
+Ignition  Plugin `RobotiqController`  is created to control Robotiq  Gripper(2 fingers gripper) . 
 
 **Usage**
 
