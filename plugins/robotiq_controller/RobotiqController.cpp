@@ -59,7 +59,6 @@ class ignition::gazebo::systems::RobotiqControllerPrivate {
    public:
     transport::Node node;
     bool initialized{false};
-
     //model
     Model model{kNullEntity};
     //gripper joint
@@ -69,7 +68,7 @@ class ignition::gazebo::systems::RobotiqControllerPrivate {
     vector<Entity> jointEntities;
     //Gripper Data
     string gripperName{"gripper"};
-    bool fixedGraspedLink{true};
+    bool isFixed{false};
     double velScale{1.0};
     //grasp object by using detachable joint (contain contact detection)
     Entity gripperBaseLink;
@@ -95,7 +94,7 @@ void RobotiqController::Configure(const Entity &_entity,
     }
     // Get params from SDF
     if (_sdf->HasElement("fixed")){
-        this->dataPtr->fixedGraspedLink = _sdf->Get<bool>("fixed");
+        this->dataPtr->isFixed = _sdf->Get<bool>("fixed");
     }
     if (_sdf->HasElement("vel_scale")){
         this->dataPtr->velScale=_sdf->Get<double>("vel_scale");
@@ -136,8 +135,12 @@ void RobotiqController::PreUpdate(const ignition::gazebo::UpdateInfo &_info,
             auto &colEntity = this->dataPtr->gripperFingerCollisions[i];
             _ecm.CreateComponent(colEntity,components::ContactSensorData());
         }
-        this->dataPtr->setJointVelocity(_ecm, 0);
+        for (size_t i = 0; i < this->dataPtr->jointEntities.size(); i++) {
+            _ecm.CreateComponent(this->dataPtr->jointEntities[i], components::JointPosition());
+            _ecm.CreateComponent(this->dataPtr->jointEntities[i], components::JointVelocityCmd({0}));
+        }
         this->dataPtr->initialized=true;
+        return;
     }
     //current state
     GripperStatus gripperStatus;
@@ -178,19 +181,12 @@ void RobotiqControllerPrivate::setJointVelocity(ignition::gazebo::EntityComponen
     for (size_t i = 0; i < this->jointEntities.size(); i++) {
         auto jointVelCmd = _ecm.Component<components::JointVelocityCmd>(this->jointEntities[i]);
         double jointVel = vel * this->jointMultipliers[i];
-        if (jointVelCmd == nullptr) {
-            _ecm.CreateComponent(this->jointEntities[i], components::JointVelocityCmd({jointVel}));
-        } else {
-            jointVelCmd->Data()[0] = jointVel;
-        }
+        jointVelCmd->Data()[0] = jointVel;
     }
 }
 
 double RobotiqControllerPrivate::getJointPosition(ignition::gazebo::EntityComponentManager &_ecm) {
     auto jointPosComp = _ecm.Component<components::JointPosition>(this->jointEntities[0]);
-    if (jointPosComp == nullptr) {
-        _ecm.CreateComponent(this->jointEntities[0], components::JointPosition());
-    }
     return fabs(jointPosComp->Data().at(0));
 }
 
@@ -198,17 +194,12 @@ Entity RobotiqControllerPrivate::getGraspedLink(ignition::gazebo::EntityComponen
     for (int i = 0; i < 2; i++) {
         auto &colEntity = this->gripperFingerCollisions[i];
         auto contacts = _ecm.Component<components::ContactSensorData>(colEntity);
-        if (contacts) {
-            for (const auto &contact : contacts->Data().contact()) {
-                auto targetColEntity = (contact.collision1().id() != colEntity) ? contact.collision1().id() : contact.collision2().id();
-                //
-                auto *parentEntity = _ecm.Component<components::ParentEntity>(targetColEntity);
-                if (nullptr == parentEntity)
-                    continue;
-                return parentEntity->Data();
-            }
-        }else{
-            _ecm.CreateComponent(colEntity,components::ContactSensorData());
+        for (const auto &contact : contacts->Data().contact()) {
+            auto targetColEntity = (contact.collision1().id() != colEntity) ? contact.collision1().id() : contact.collision2().id();
+            auto *parentEntity = _ecm.Component<components::ParentEntity>(targetColEntity);
+            if (nullptr == parentEntity)
+                continue;
+            return parentEntity->Data();
         }
     }
     return kNullEntity;
@@ -231,7 +222,7 @@ void RobotiqControllerPrivate::detachGraspedLink(ignition::gazebo::EntityCompone
 }
 
 bool RobotiqControllerPrivate::checkOpenGripper(ignition::gazebo::EntityComponentManager &_ecm) {
-    if(this->fixedGraspedLink){
+    if(this->isFixed){
         detachGraspedLink(_ecm);
     }
     auto base = getJointPosition(_ecm);
@@ -241,9 +232,6 @@ bool RobotiqControllerPrivate::checkOpenGripper(ignition::gazebo::EntityComponen
     double diff = 0;
     for (size_t i = 0; i < this->jointEntities.size(); i++) {
         auto jointPosComp = _ecm.Component<components::JointPosition>(this->jointEntities[i]);
-        if (jointPosComp == nullptr) {
-            _ecm.CreateComponent(this->jointEntities[0], components::JointPosition());
-        }
         auto pos = fabs(jointPosComp->Data().at(0));
         diff = diff + fabs(pos - base);
     }
@@ -256,20 +244,17 @@ bool RobotiqControllerPrivate::checkOpenGripper(ignition::gazebo::EntityComponen
 bool RobotiqControllerPrivate::checkCloseGripper(ignition::gazebo::EntityComponentManager &_ecm) {
     auto base = getJointPosition(_ecm);
     if (base > 0.695) {
-        std::cout << "Grasp Nothing!" << std::endl;
+        ignmsg << "Grasp Nothing!" << std::endl;
         return true;
     }
     double diff = 0;
     for (size_t i = 0; i < this->jointEntities.size(); i++) {
         auto jointPosComp = _ecm.Component<components::JointPosition>(this->jointEntities[i]);
-        if (jointPosComp == nullptr) {
-            _ecm.CreateComponent(this->jointEntities[0], components::JointPosition());
-        }
         auto pos = fabs(jointPosComp->Data().at(0));
         diff = diff + fabs(pos - base);
     }
     if (diff > 0.02) {
-        if(this->fixedGraspedLink){
+        if(this->isFixed){
             //use fixed joint to fix Grasped Object
             auto link=getGraspedLink(_ecm);
             if(link != kNullEntity){
