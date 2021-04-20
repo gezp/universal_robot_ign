@@ -160,7 +160,7 @@ Ignition Gazebo performs better than Gazebo-classic on the Grasp Task, but also 
 
 * it can grasp box tightly In Ignition Gazebo
   * it performs better than Gazebo-classic.
-* it can't grasp sphere In Ignition Gazebo
+* it can't grasp sphere In Ignition Gazebo (RobotiqController is based on velocity control, not effort control)
   * Because the size of contact area is so small that the friction is not enough to hold grasped object, and property `max_depth`  of `contact`  is not implemented In Ignition Gazebo currently.
   * In this situation, a fixed joint is needed to fix object with gripper, you can modified SDF and set Tag `fixed` with `ture`.
 
