@@ -1,21 +1,21 @@
 <?xml version="1.0"?>
 <sdf version='1.7'>
     <!--robotiq material and surface definition-->
-    <xacro_define_macro name="robotiq_material_black">
+    <xmacro_define_block name="robotiq_material_black">
         <material>
             <ambient>0.3 0.3 0.3 1</ambient>
             <diffuse>0.3 0.3 0.3 1</diffuse>
             <specular>1 1 1 1</specular>
         </material>
-    </xacro_define_macro>
-    <xacro_define_macro name="robotiq_material_grey">
+    </xmacro_define_block>
+    <xmacro_define_block name="robotiq_material_grey">
         <material>
             <ambient>0.7 0.7 0.7 1</ambient>
             <diffuse>0.7 0.7 0.7 1</diffuse>
             <specular>1 1 1 1</specular>
         </material>
-    </xacro_define_macro>
-    <xacro_define_macro name="robotiq_surface">
+    </xmacro_define_block>
+    <xmacro_define_block name="robotiq_surface">
         <surface>
             <friction>
                 <ode>
@@ -29,10 +29,10 @@
 				</ode>
 			</contact>
         </surface>
-    </xacro_define_macro>
+    </xmacro_define_block>
     <!--model definition-->
     <!--xacro(https://github.com/ros-industrial/universal_robot) -> urdf(use xacro) -> sdf(use ign sdf -p),and it's modified -->
-    <xacro_define_macro name='robotiq140' params="parent">
+    <xmacro_define_block name='robotiq140' params="parent">
         <link name='robotiq_arg2f_base_link'>
             <pose relative_to='${parent}'>0 0 0 0 0 0</pose>
             <inertial>
@@ -120,7 +120,7 @@
                         <uri>model://robotiq140/meshes/visual/robotiq_arg2f_140_outer_knuckle.stl</uri>
                     </mesh>
                 </geometry>
-                <xacro_macro name="robotiq_material_grey"/>
+                <xmacro_block name="robotiq_material_grey"/>
             </visual>
             <visual name='left_outer_finger_visual'>
                 <pose>0 0.01822 0.026002 0 -0 0</pose>
@@ -129,7 +129,7 @@
                         <uri>model://robotiq140/meshes/visual/robotiq_arg2f_140_outer_finger.stl</uri>
                     </mesh>
                 </geometry>
-                <xacro_macro name="robotiq_material_black"/>
+                <xmacro_block name="robotiq_material_black"/>
             </visual>
         </link>
         <joint name='left_inner_finger_joint' type='revolute'>
@@ -178,7 +178,7 @@
                         <size>0.03 0.07 0.0075</size>
                     </box>
                 </geometry>
-                <xacro_macro name="robotiq_surface"/>
+                <xmacro_block name="robotiq_surface"/>
             </collision>
             <visual name='left_inner_finger_visual'>
                 <geometry>
@@ -186,7 +186,7 @@
                         <uri>model://robotiq140/meshes/visual/robotiq_arg2f_140_inner_finger.stl</uri>
                     </mesh>
                 </geometry>
-                <xacro_macro name="robotiq_material_black"/>
+                <xmacro_block name="robotiq_material_black"/>
             </visual>
             <visual name='left_inner_finger_pad_visual'>
                 <pose>0 0.045755 -0.02722 0 -0 0</pose>
@@ -195,7 +195,7 @@
                         <size>0.027 0.065 0.0075</size>
                     </box>
                 </geometry>
-                <xacro_macro name="robotiq_material_grey"/>
+                <xmacro_block name="robotiq_material_grey"/>
             </visual>
         </link>
         <joint name='left_inner_knuckle_joint' type='revolute'>
@@ -243,7 +243,7 @@
                         <uri>model://robotiq140/meshes/visual/robotiq_arg2f_140_inner_knuckle.stl</uri>
                     </mesh>
                 </geometry>
-                <xacro_macro name="robotiq_material_black"/>
+                <xmacro_block name="robotiq_material_black"/>
             </visual>
         </link>
         <joint name='right_inner_knuckle_joint' type='revolute'>
@@ -291,7 +291,7 @@
                         <uri>model://robotiq140/meshes/visual/robotiq_arg2f_140_inner_knuckle.stl</uri>
                     </mesh>
                 </geometry>
-                <xacro_macro name="robotiq_material_black"/>
+                <xmacro_block name="robotiq_material_black"/>
             </visual>
         </link>
         <joint name='right_outer_knuckle_joint' type='revolute'>
@@ -347,7 +347,7 @@
                         <uri>model://robotiq140/meshes/visual/robotiq_arg2f_140_outer_knuckle.stl</uri>
                     </mesh>
                 </geometry>
-                <xacro_macro name="robotiq_material_grey"/>
+                <xmacro_block name="robotiq_material_grey"/>
             </visual>
             <visual name='right_outer_finger_visual'>
                 <pose>0 0.01822 0.026002 0 -0 0</pose>
@@ -356,7 +356,7 @@
                         <uri>model://robotiq140/meshes/visual/robotiq_arg2f_140_outer_finger.stl</uri>
                     </mesh>
                 </geometry>
-                <xacro_macro name="robotiq_material_black"/>
+                <xmacro_block name="robotiq_material_black"/>
             </visual>
         </link>
         <joint name='right_inner_finger_joint' type='revolute'>
@@ -406,7 +406,7 @@
                         <size>0.03 0.07 0.0075</size>
                     </box>
                 </geometry>
-                <xacro_macro name="robotiq_surface"/>
+                <xmacro_block name="robotiq_surface"/>
             </collision>
             <visual name='right_inner_finger_visual'>
                 <geometry>
@@ -414,7 +414,7 @@
                         <uri>model://robotiq140/meshes/visual/robotiq_arg2f_140_inner_finger.stl</uri>
                     </mesh>
                 </geometry>
-                <xacro_macro name="robotiq_material_black"/>
+                <xmacro_block name="robotiq_material_black"/>
             </visual>
             <visual name='right_inner_finger_pad_visual'>
                 <pose>0 0.045755 -0.02722 0 -0 0</pose>
@@ -423,8 +423,20 @@
                         <size>0.027 0.065 0.0075</size>
                     </box>
                 </geometry>
-                <xacro_macro name="robotiq_material_grey"/>
+                <xmacro_block name="robotiq_material_grey"/>
             </visual>
         </link>
-    </xacro_define_macro>
+    </xmacro_define_block>
+    <!--robotiq_position_contoller plugin definition-->
+    <xmacro_define_block name="robotiq_position_contoller" params="joint_name p i d i_max i_min">
+        <plugin filename="ignition-gazebo-joint-position-controller-system"
+                name="ignition::gazebo::systems::JointPositionController">
+            <joint_name>${joint_name}</joint_name>
+            <p_gain>${p}</p_gain>
+            <i_gain>${i}</i_gain>
+            <d_gain>${d}</d_gain>
+            <i_max>${i_max}</i_max>
+            <i_min>${i_min}</i_min>
+        </plugin>
+    </xmacro_define_block>
 </sdf>

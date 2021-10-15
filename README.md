@@ -8,12 +8,12 @@ It provides SDF models of universal robot for Ignition Gazebo. In addition, it a
 
 ### Install
 
-* ROS: foxy
-* Ignition :Dome 
+* ROS: galactic
+* Ignition : Edifice 
 
 ```bash
 #install dependency
-sudo apt-get install ros-foxy-joint-state-publisher-gui
+sudo apt-get install ros-galactic-joint-state-publisher-gui
 #cd src of ros2 workspace and download source code
 git clone https://github.com/gezp/universal_robot_ign.git
 #cd ros2 workspace and build
@@ -24,7 +24,7 @@ colcon build
 
 * use  `moveit2` and `joint_trajectory_controller` to control UR10.
 
-> moveit2 should be installed: [MoveIt 2 Source Build - Linux](https://moveit.ros.org/install-moveit2/source/)
+> moveit2 should be installed ([MoveIt 2 Binary Install](https://moveit.ros.org/install-moveit2/binary/))
 
 launch Ignition Gazebo simulator for UR10 
 
@@ -50,7 +50,7 @@ ros2 run universal_robot_ign test_pose_goal.py
 
 the result:
 
-![](docs/imgs/ur10_moveit2_demo.gif)
+![](doc/imgs/ur10_moveit2_demo.gif)
 
 ### UR10 + Robotiq140 Grasp demo
 
@@ -81,7 +81,7 @@ ros2 launch universal_robot_ign ur10_robotiq140_demo.launch.py
 *  `joint_position_controller` will be used in this demo
 the result:
 
-![](docs/imgs/ur10_robotiq140_grasp_demo.png)
+![](doc/imgs/ur10_robotiq140_grasp_demo.png)
 
 ## 2. models
 
@@ -90,13 +90,13 @@ the package contains  robotic arm `universal_robot` SDF models (`ur3`,`ur5`,`ur1
 * the sdf files of these models are written modularly by use [xacro4sdf](https://github.com/gezp/xacro4sdf) which is a xml macro tool.
 *  it's easy to combine different model, for example, `ur10_robotiq140` is  `ur10` robotic arm attached `robotiq140` gripper .
 
-![](docs/imgs/ur10_robotiq140.png)
+![](doc/imgs/ur10_robotiq140.png)
 
 ## 3. UR Controller
 
 **Controller Struture**
 
-![](docs/imgs/controller_struture.png)
+![](doc/imgs/controller_struture.png)
 
 **Ignition Controller**
 

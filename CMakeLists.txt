@@ -16,14 +16,47 @@ find_package(sensor_msgs REQUIRED)
 find_package(trajectory_msgs REQUIRED)
 
 # ignition package
-# find_package(ignition-plugin1 REQUIRED)
-# set(IGN_PLUGIN_VER 1)
-find_package(ignition-gazebo4 REQUIRED)
-set(IGN_GAZEBO_VER 4)
-find_package(ignition-transport9 REQUIRED)
-set(IGN_TRANSPORT_VER 9)
-find_package(ignition-msgs6 REQUIRED)
-set(IGN_MSGS_VER 6)
+message(WARNING "$ENV{IGNITION_VERSION}")
+# Citadel
+if("$ENV{IGNITION_VERSION}" STREQUAL "citadel")
+  find_package(ignition-transport8 REQUIRED)
+  set(IGN_TRANSPORT_VER ${ignition-transport8_VERSION_MAJOR})
+
+  find_package(ignition-msgs5 REQUIRED)
+  set(IGN_MSGS_VER ${ignition-msgs5_VERSION_MAJOR})
+
+  message(STATUS "Compiling against Ignition Citadel")
+# Dome
+elseif("$ENV{IGNITION_VERSION}" STREQUAL "dome")
+  find_package(ignition-transport9 REQUIRED)
+  set(IGN_TRANSPORT_VER ${ignition-transport9_VERSION_MAJOR})
+
+  find_package(ignition-msgs6 REQUIRED)
+  set(IGN_MSGS_VER ${ignition-msgs6_VERSION_MAJOR})
+
+  message(STATUS "Compiling against Ignition Dome")
+# Fortress
+elseif("$ENV{IGNITION_VERSION}" STREQUAL "fortress")
+  find_package(ignition-transport11 REQUIRED)
+  set(IGN_TRANSPORT_VER ${ignition-transport11_VERSION_MAJOR})
+
+  find_package(ignition-msgs8 REQUIRED)
+  set(IGN_MSGS_VER ${ignition-msgs8_VERSION_MAJOR})
+
+  message(STATUS "Compiling against Ignition Fortress")
+# Default to Edifice
+else()
+  find_package(ignition-transport10 REQUIRED)
+  set(IGN_TRANSPORT_VER ${ignition-transport10_VERSION_MAJOR})
+
+  find_package(ignition-msgs7 REQUIRED)
+  set(IGN_MSGS_VER ${ignition-msgs7_VERSION_MAJOR})
+  message(STATUS "Compiling against Ignition Fortress")
+endif()
+
+find_package(ignition-gazebo5 REQUIRED)
+set(IGN_GAZEBO_VER ${ignition-gazebo5_VERSION_MAJOR})
+
 
 # include
 include_directories(include)
@@ -40,33 +73,27 @@ ament_target_dependencies(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME}
-    ignition-msgs${IGN_MSGS_VER}::core
-    ignition-transport${IGN_TRANSPORT_VER}::core
+  ignition-msgs${IGN_MSGS_VER}::core
+  ignition-transport${IGN_TRANSPORT_VER}::core
 )
 
 #executable node
-add_executable(joint_state_publisher nodes/joint_state_publisher_node.cpp)
+add_executable(joint_state_publisher src/joint_state_publisher_main.cpp)
 target_link_libraries(joint_state_publisher ${PROJECT_NAME})
 
-add_executable(joint_position_controller nodes/joint_position_controller_node.cpp)
-target_link_libraries(joint_position_controller ${PROJECT_NAME})
-
-add_executable(joint_trajectory_controller nodes/joint_trajectory_controller_node.cpp)
-target_link_libraries(joint_trajectory_controller ${PROJECT_NAME})
-
-add_executable(joint_controller nodes/joint_controller_node.cpp)
+add_executable(joint_controller src/joint_controller_main.cpp)
 target_link_libraries(joint_controller ${PROJECT_NAME})
 
 # for ignition-gazebo plugin RobotiqController
 add_library(RobotiqController SHARED plugins/robotiq_controller/RobotiqController.cpp)
 
 target_link_libraries(RobotiqController
-  ignition-gazebo${IGN_GAZEBO_VER}::ignition-gazebo${IGN_GAZEBO_VER}
+    ignition-gazebo${IGN_GAZEBO_VER}::ignition-gazebo${IGN_GAZEBO_VER}
 )
 
 #install
 install( DIRECTORY
-    ign launch models worlds res
+    ign launch resource
   DESTINATION share/${PROJECT_NAME}
 )
 
@@ -85,7 +112,7 @@ install(TARGETS ${PROJECT_NAME}
 )
 
 # Install executables
-install(TARGETS joint_state_publisher joint_position_controller joint_trajectory_controller joint_controller
+install(TARGETS joint_state_publisher  joint_controller
   DESTINATION lib/${PROJECT_NAME} 
 )
 

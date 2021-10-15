@@ -13,7 +13,7 @@ from launch_ros.actions import Node
 def generate_launch_description():
     pkg_universal_robot_ign = get_package_share_directory('universal_robot_ign')
     # parameter
-    urdf = os.path.join(pkg_universal_robot_ign,"res","ur10_moveit_config","ur10.urdf")
+    urdf = os.path.join(pkg_universal_robot_ign,"resource","urdf","ur10.urdf")
     # cmd_joint_states GUI publisher (position controller) 
     cmd_gui_publisher = Node(package='joint_state_publisher_gui',
             executable='joint_state_publisher_gui',

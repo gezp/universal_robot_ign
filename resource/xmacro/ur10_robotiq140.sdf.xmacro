@@ -1,14 +1,13 @@
 <?xml version="1.0"?>
 <sdf version="1.7">
     <!--include defination-->
-    <xacro_include_definition uri="model://ur10/ur10.def.xmacro" />
-    <xacro_include_definition uri="model://ur10/ur10_position_controller.def.xmacro" />
-    <xacro_include_definition uri="model://robotiq140/robotiq140.def.xmacro" />
+    <xmacro_include uri="model://ur10/ur10.def.xmacro" />
+    <xmacro_include uri="model://robotiq140/robotiq140.def.xmacro" />
     <!--model-->
     <model name="ur10_robotiq140">
         <!--model: ur10+robotiq140 -->
-        <xacro_macro name="ur10" parent="__model__"/>
-        <xacro_macro name="robotiq140" parent="ur10_robotiq140_joint"/>
+        <xmacro_block name="ur10" parent="__model__"/>
+        <xmacro_block name="robotiq140" parent="ur10_robotiq140_joint"/>
         <joint name="ur10_robotiq140_joint" type="fixed">
             <pose relative_to='wrist_3_link'>0 0.0922 0 ${-3.14159/2} ${-3.14159/2} 0</pose>
             <parent>wrist_3_link</parent>
@@ -19,7 +18,7 @@
             <child>base_link</child>
         </joint>
         <!--controller plugins for ur10-->
-        <xacro_macro name="ur10_position_controller"/>
+        <xmacro_block name="ur10_position_controller"/>
         <!--controller plugins for robotiq140-->
         <plugin filename="RobotiqController" 
                 name="ignition::gazebo::systems::RobotiqController">

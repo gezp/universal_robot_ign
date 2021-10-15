@@ -13,7 +13,7 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 def generate_launch_description():
     pkg_universal_robot_ign = get_package_share_directory('universal_robot_ign')
     # Launch Arguments
-    urdf = os.path.join(pkg_universal_robot_ign,"res","ur10_moveit_config","ur10.urdf")
+    urdf = os.path.join(pkg_universal_robot_ign,"resource","urdf","ur10.urdf")
     rviz2_config = os.path.join(pkg_universal_robot_ign,"launch", "test.rviz")
 
     # Robot state publisher

@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<sdf version='1.7'>
+    <!--include defination-->
+    <xmacro_include uri="model://robotiq140/robotiq140.def.xmacro" />
+    <xmacro_define_value name="global_robotiq_p" value="0.5"/>
+    <xmacro_define_value name="global_robotiq_i" value="0"/>
+    <xmacro_define_value name="global_robotiq_d" value="0.01"/>
+    <!--model-->
+    <model name="robotiq140">
+        <xmacro_block name="robotiq140" parent="__model__"/>
+        <!--controller plugins for robotiq140-->
+        <xmacro_block name="robotiq_position_contoller" joint_name="finger_joint"
+                p="10" i="${global_robotiq_i}" d="0" i_max="-1" i_min="1"/>
+        <xmacro_block name="robotiq_position_contoller" joint_name="left_inner_finger_joint"
+                p="${global_robotiq_p}" i="${global_robotiq_i}" d="${global_robotiq_d}" i_max="-1" i_min="1"/>
+        <xmacro_block name="robotiq_position_contoller" joint_name="left_inner_knuckle_joint"
+                p="${global_robotiq_p}" i="${global_robotiq_i}" d="${global_robotiq_d}" i_max="-1" i_min="1"/>
+        <xmacro_block name="robotiq_position_contoller" joint_name="right_inner_knuckle_joint"
+                p="${global_robotiq_p}" i="${global_robotiq_i}" d="${global_robotiq_d}" i_max="-1" i_min="1"/>
+        <xmacro_block name="robotiq_position_contoller" joint_name="right_outer_knuckle_joint"
+                p="10" i="${global_robotiq_i}" d="0" i_max="-1" i_min="1"/>
+        <xmacro_block name="robotiq_position_contoller" joint_name="right_inner_finger_joint"
+                p="${global_robotiq_p}" i="${global_robotiq_i}" d="${global_robotiq_d}" i_max="-1" i_min="1"/>
+        <!--joint state publisher-->
+        <plugin filename="ignition-gazebo-joint-state-publisher-system" 
+                name="ignition::gazebo::systems::JointStatePublisher">
+            <joint_name>finger_joint</joint_name>
+            <joint_name>left_inner_finger_joint</joint_name>
+            <joint_name>left_inner_knuckle_joint</joint_name>
+            <joint_name>right_inner_knuckle_joint</joint_name>
+            <joint_name>right_outer_knuckle_joint</joint_name>
+            <joint_name>right_inner_finger_joint</joint_name>
+        </plugin>
+    </model>
+</sdf>

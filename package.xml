@@ -3,7 +3,7 @@
 <package format="3">
     <name>universal_robot_ign</name>
     <version>1.0.0</version>
-    <description>Ignition Simulator for RoboMaster University AI Challenge 2019</description>
+    <description>Ignition Simulator for Universal Robot (UR)</description>
     <maintainer email="zhenpeng.ge@qq.com">Zhenpeng Ge</maintainer>
     <license>MIT</license>
     <buildtool_depend>ament_cmake</buildtool_depend>

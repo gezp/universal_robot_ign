@@ -39,22 +39,22 @@ def generate_launch_description():
     use_sim_time = LaunchConfiguration("use_sim_time", default=False)
 
     # URDF
-    robot_urdf_config = load_file("universal_robot_ign","res/ur10_moveit_config/ur10.urdf")
+    robot_urdf_config = load_file("universal_robot_ign","resource/urdf/ur10.urdf")
     robot_description = {"robot_description": robot_urdf_config}
 
     # SRDF
-    robot_srdf = load_file("universal_robot_ign","res/ur10_moveit_config/ur10.srdf")
+    robot_srdf = load_file("universal_robot_ign","resource/ur10_moveit_config/ur10.srdf")
     robot_description_semantic = {"robot_description_semantic": robot_srdf}
 
     # Kinematics
-    kinematics = load_yaml("universal_robot_ign","res/ur10_moveit_config/kinematics.yaml")
+    kinematics = load_yaml("universal_robot_ign","resource/ur10_moveit_config/kinematics.yaml")
 
     # Joint limits
-    joint_limits_yaml = load_yaml("universal_robot_ign", "res/ur10_moveit_config/joint_limits.yaml")
+    joint_limits_yaml = load_yaml("universal_robot_ign", "resource/ur10_moveit_config/joint_limits.yaml")
     joint_limits = {"robot_description_planning": joint_limits_yaml}
 
     # Planning
-    ompl_yaml = load_yaml("universal_robot_ign","res/ur10_moveit_config/ompl_planning.yaml")
+    ompl_yaml = load_yaml("universal_robot_ign","resource/ur10_moveit_config/ompl_planning.yaml")
     planning = {"move_group": {
         "planning_plugin": "ompl_interface/OMPLPlanner",
         "request_adapters": """default_planner_request_adapters/AddTimeParameterization default_planner_request_adapters/FixWorkspaceBounds default_planner_request_adapters/FixStartStateBounds default_planner_request_adapters/FixStartStateCollision default_planner_request_adapters/FixStartStatePathConstraints""",
