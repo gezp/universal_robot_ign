@@ -4,7 +4,7 @@
 
 It provides SDF models of universal robot for Ignition Gazebo. In addition, it also provides a moveit2 application demo and simple  grasp demo with Gripper Robotiq140 . 
 
-## 1. Usage
+## Usage
 
 ### Install
 
@@ -83,31 +83,35 @@ the result:
 
 ![](doc/imgs/ur10_robotiq140_grasp_demo.png)
 
-## 2. models
+## Models
 
-the package contains  robotic arm `universal_robot` SDF models (`ur3`,`ur5`,`ur10`) , a robotic gripper SDF models (`robotiq140 `) ,and a combination model `ur10_robotiq140` .
+the package contains some SDF models :
 
-* the sdf files of these models are written modularly by use [xacro4sdf](https://github.com/gezp/xacro4sdf) which is a xml macro tool.
-*  it's easy to combine different model, for example, `ur10_robotiq140` is  `ur10` robotic arm attached `robotiq140` gripper .
+* robotic arm `universal_robot` models : `ur3`,`ur5`,`ur10` 
+* robotic gripper models: `robotiq140 `
+
+in addition, it also provides a combination model `ur10_robotiq140` (`resource/xmacro/ur10_robotiq140.sdf.xmacro`), which  is `ur10` robotic arm attached `robotiq140` gripper.
+
+> the sdf files of these models are written modularly by use [xmacro](https://github.com/gezp/xmacro) which is a xml macro tool.
 
 ![](doc/imgs/ur10_robotiq140.png)
 
-## 3. UR Controller
+## Controllers
 
-**Controller Struture**
+### UR Controller
 
 ![](doc/imgs/controller_struture.png)
 
-**Ignition Controller**
+Ignition Controller
 
-* Ignition plugin `ignition-gazebo-joint-position-controller-system`  is used to control  joints of robotic arm .
+* Ignition plugin `ignition-gazebo-joint-position-controller-system` is used to control joints of robotic arm .
 * The position PID parameter should be set in plugins.
 
 >  PID parameter：
 >
 > * The PID parameter of Ignition joint position controller plugin is set roughly ,so the performance of control is not well, you can modify PID parameter by modifying SDF file of model.
 
-**ROS controller**
+ROS controller
 
 * `joint_position_controller` 
   *  receive ROS msg `sensor_msgs::msg::JointState` and publish target position `ignition::msgs::Double` for each joint (control based on position pid) . 
@@ -117,11 +121,9 @@ the package contains  robotic arm `universal_robot` SDF models (`ur3`,`ur5`,`ur1
   * use interpolation based on time for joint trajectory and  keep publishing target position according to current time until the last trajectory point is processed .
   * this is not the most efficient way, but easy to Implement (it can work well with moveit2)
 
-## 4.Robotiq Ignition Controller
+### Robotiq Ignition Controller
 
-Ignition  Plugin `RobotiqController`  is created to control Robotiq  Gripper(2 fingers gripper) . 
-
-**Usage**
+Ignition Plugin `RobotiqController`  is created to control Robotiq  Gripper(2 fingers gripper) . 
 
 Add plugin In SDF
 
@@ -152,19 +154,19 @@ Publish ROS2 msg
 
 * use `scripts/test_gripper.py`
 
-**Slipping Problem**
+> Slipping Problem
+>
+> There is Gripper Slipping Problem on Gazebo-classic which need use plugin to add fixed joint between object and gripper when grasp.   
+>
+> Ignition Gazebo performs better than Gazebo-classic on the Grasp Task, but also exists some problem in some situations.
+>
+> * it can grasp box tightly In Ignition Gazebo
+>   * it performs better than Gazebo-classic.
+> * it can't grasp sphere In Ignition Gazebo (RobotiqController is based on velocity control, not effort control)
+>   * Because the size of contact area is so small that the friction is not enough to hold grasped object, and property `max_depth`  of `contact`  is not implemented In Ignition Gazebo currently.
+>   * In this situation, a fixed joint is needed to fix object with gripper, you can modified SDF and set Tag `fixed` with `ture`.
 
-There is Gripper Slipping Problem on Gazebo-classic which need use plugin to add fixed joint between object and gripper when grasp.   
-
-Ignition Gazebo performs better than Gazebo-classic on the Grasp Task, but also exists some problem in some situations.
-
-* it can grasp box tightly In Ignition Gazebo
-  * it performs better than Gazebo-classic.
-* it can't grasp sphere In Ignition Gazebo (RobotiqController is based on velocity control, not effort control)
-  * Because the size of contact area is so small that the friction is not enough to hold grasped object, and property `max_depth`  of `contact`  is not implemented In Ignition Gazebo currently.
-  * In this situation, a fixed joint is needed to fix object with gripper, you can modified SDF and set Tag `fixed` with `ture`.
-
-## 5. Maintainer  and  License
+## Maintainer and License
 
 Maintainer : Zhenpeng Ge, [zhenpeng.ge@qq.com](mailto:zhenpeng.ge@qq.com)
 
