@@ -8,12 +8,13 @@ It provides SDF models of universal robot for Ignition Gazebo. In addition, it a
 
 ### Install
 
-* ROS: galactic
-* Ignition : Edifice 
+* ROS 2: Galactic
+* Ignition : Fortress 
 
 ```bash
 #install dependency
 sudo apt-get install ros-galactic-joint-state-publisher-gui
+export IGNITION_VERSION=fortress
 #cd src of ros2 workspace and download source code
 git clone https://github.com/gezp/universal_robot_ign.git
 #cd ros2 workspace and build

@@ -19,6 +19,9 @@ find_package(trajectory_msgs REQUIRED)
 message(WARNING "$ENV{IGNITION_VERSION}")
 # Citadel
 if("$ENV{IGNITION_VERSION}" STREQUAL "citadel")
+  find_package(ignition-gazebo3 REQUIRED)
+  set(IGN_GAZEBO_VER ${ignition-gazebo3_VERSION_MAJOR})
+
   find_package(ignition-transport8 REQUIRED)
   set(IGN_TRANSPORT_VER ${ignition-transport8_VERSION_MAJOR})
 
@@ -28,6 +31,9 @@ if("$ENV{IGNITION_VERSION}" STREQUAL "citadel")
   message(STATUS "Compiling against Ignition Citadel")
 # Dome
 elseif("$ENV{IGNITION_VERSION}" STREQUAL "dome")
+  find_package(ignition-gazebo4 REQUIRED)
+  set(IGN_GAZEBO_VER ${ignition-gazebo4_VERSION_MAJOR})
+
   find_package(ignition-transport9 REQUIRED)
   set(IGN_TRANSPORT_VER ${ignition-transport9_VERSION_MAJOR})
 
@@ -37,6 +43,9 @@ elseif("$ENV{IGNITION_VERSION}" STREQUAL "dome")
   message(STATUS "Compiling against Ignition Dome")
 # Fortress
 elseif("$ENV{IGNITION_VERSION}" STREQUAL "fortress")
+  find_package(ignition-gazebo6 REQUIRED)
+  set(IGN_GAZEBO_VER ${ignition-gazebo6_VERSION_MAJOR})
+
   find_package(ignition-transport11 REQUIRED)
   set(IGN_TRANSPORT_VER ${ignition-transport11_VERSION_MAJOR})
 
@@ -46,6 +55,9 @@ elseif("$ENV{IGNITION_VERSION}" STREQUAL "fortress")
   message(STATUS "Compiling against Ignition Fortress")
 # Default to Edifice
 else()
+  find_package(ignition-gazebo5 REQUIRED)
+  set(IGN_GAZEBO_VER ${ignition-gazebo5_VERSION_MAJOR})
+
   find_package(ignition-transport10 REQUIRED)
   set(IGN_TRANSPORT_VER ${ignition-transport10_VERSION_MAJOR})
 
@@ -53,10 +65,6 @@ else()
   set(IGN_MSGS_VER ${ignition-msgs7_VERSION_MAJOR})
   message(STATUS "Compiling against Ignition Fortress")
 endif()
-
-find_package(ignition-gazebo5 REQUIRED)
-set(IGN_GAZEBO_VER ${ignition-gazebo5_VERSION_MAJOR})
-
 
 # include
 include_directories(include)

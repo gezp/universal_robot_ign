@@ -25,7 +25,7 @@ def generate_launch_description():
             os.path.join(pkg_ros_ign_gazebo, 'launch', 'ign_gazebo.launch.py'),
         ),
         launch_arguments={
-            'ign_args': world_sdf_path + ' -v 2 --gui-config ' + ign_config_path,
+            'ign_args': world_sdf_path + ' -r -v 2 --gui-config ' + ign_config_path,
         }.items()
     )
     ld.add_action(ignition_simulator)
