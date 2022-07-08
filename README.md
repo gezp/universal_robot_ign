@@ -21,17 +21,6 @@ git clone https://github.com/gezp/universal_robot_ign.git
 colcon build
 ```
 
-Add the following entries to your .bashrc and replace YOUR_WORKSPACE with your workspace name.
-```bash
-# Sets the Ignition verion to Fortress
-export IGNITION_VERSION=fortress
-# Finds the models
-export IGN_GAZEBO_RESOURCE_PATH=~/.ignition/models
-IGN_GAZEBO_RESOURCE_PATH=$IGN_GAZEBO_RESOURCE_PATH:~/YOUR_WORKSPACE/install/universal_robot_ign/share/universal_robot_ign/resource/models
-# Sources the workspace
-source ~/ros2/YOUR_WORKSPACE/install/setup.bash
-```
-
 ###  UR10 moveit2 demo
 
 * use  `moveit2` and `joint_trajectory_controller` to control UR10.
