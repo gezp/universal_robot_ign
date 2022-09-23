@@ -10,6 +10,7 @@ from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch_ros.actions import Node
 from launch.substitutions import LaunchConfiguration
+from sdformat_tools.urdf_generator import UrdfGenerator
 
 
 def load_file(package_name, file_path):
@@ -37,9 +38,13 @@ def load_yaml(package_name, file_path):
 def generate_launch_description():
     # Launch Arguments
     use_sim_time = LaunchConfiguration("use_sim_time", default=False)
-
+    pkg_universal_robot_ign = get_package_share_directory('universal_robot_ign')
     # URDF
-    robot_urdf_config = load_file("universal_robot_ign","resource/urdf/ur10.urdf")
+    robot_sdf_path=os.path.join(pkg_universal_robot_ign, 'resource', 'models', 'ur10', 'model.sdf') 
+    urdf_generator = UrdfGenerator()
+    urdf_generator.parse_from_sdf_file(robot_sdf_path)
+    urdf_generator.remove_joint('world_ur10_joint')
+    robot_urdf_config = urdf_generator.to_string()
     robot_description = {"robot_description": robot_urdf_config}
 
     # SRDF

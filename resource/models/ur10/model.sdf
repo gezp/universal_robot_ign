@@ -335,6 +335,32 @@
 			</visual>
 			<self_collide>1</self_collide>
 		</link>
+		<joint name="ee_fixed_joint" type="fixed">
+			<pose relative_to="wrist_3_link">0.0 0.0922 0.0 0.0 0.0 1.5707963267948966</pose>
+			<parent>wrist_3_link</parent>
+			<child>ee_link</child>
+		</joint>
+		<link name="ee_link">
+			<inertial>
+				<mass>0.001</mass>
+				<inertia>
+					<ixx>1.6666666666666667e-08</ixx>
+					<ixy>0</ixy>
+					<ixz>0</ixz>
+					<iyy>1.6666666666666667e-08</iyy>
+					<iyz>0</iyz>
+					<izz>1.6666666666666667e-08</izz>
+				</inertia>
+			</inertial>
+			<collision name="collision">
+				<geometry>
+					<box>
+						<size>0.01 0.01 0.01</size>
+					</box>
+				</geometry>
+			</collision>
+			<self_collide>1</self_collide>
+		</link>
 		<joint name="world_ur10_joint" type="fixed">
 			<parent>world</parent>
 			<child>base_link</child>

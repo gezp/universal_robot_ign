@@ -8,20 +8,26 @@ from launch_ros.actions import Node
 from launch.substitutions import LaunchConfiguration
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from sdformat_tools.urdf_generator import UrdfGenerator
 
 
 def generate_launch_description():
     pkg_universal_robot_ign = get_package_share_directory('universal_robot_ign')
     # Launch Arguments
-    urdf = os.path.join(pkg_universal_robot_ign,"resource","urdf","ur10.urdf")
+    robot_sdf_path=os.path.join(pkg_universal_robot_ign, 'resource', 'models', 'ur10', 'model.sdf')
+    urdf_generator = UrdfGenerator()
+    urdf_generator.parse_from_sdf_file(robot_sdf_path)
+    urdf_generator.remove_joint('world_ur10_joint')
+    robot_urdf_xml = urdf_generator.to_string()
     rviz2_config = os.path.join(pkg_universal_robot_ign,"launch", "test.rviz")
 
     # Robot state publisher
     robot_state_publisher = Node(package="robot_state_publisher",
              executable="robot_state_publisher",
              name="robot_state_publisher",
-             output="screen",
-             arguments=[urdf])
+             parameters=[{'robot_description': robot_urdf_xml}],
+             output="screen")
+
     #static Robot state publisher
     static_transform_publisher=Node(package="tf2_ros",
              executable="static_transform_publisher",

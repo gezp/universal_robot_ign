@@ -331,6 +331,20 @@
             </visual>
             <self_collide>1</self_collide>
         </link>
+        <joint name="ee_fixed_joint" type="fixed">
+        	<pose relative_to="wrist_3_link">0.0 0.0922 0.0 0.0 0.0 1.5707963267948966</pose>
+            <parent>wrist_3_link</parent>
+            <child>ee_link</child>
+        </joint>
+        <link name='ee_link'>
+            <inertial>
+                <xmacro_block name="inertia_box" m="0.001" x="0.01" y="0.01" z="0.01" />
+            </inertial>
+            <collision name="collision">
+                <xmacro_block name="geometry_box" x="0.01" y="0.01" z="0.01" />
+            </collision>
+            <self_collide>1</self_collide>
+        </link>
     </xmacro_define_block>
     <!--controller definition-->
     <xmacro_define_block name='ur10_position_controller'>

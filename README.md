@@ -9,23 +9,22 @@ It provides SDF models of universal robot for Ignition Gazebo. In addition, it a
 ### Install
 
 * ROS 2: Galactic
-* Ignition : Fortress 
+* Ignition : Fortress
+* dependencies:`moveit2`, `xmacro`, `sdformat_tools` (from source code)
 
 ```bash
 #install dependency
-sudo apt-get install ros-galactic-joint-state-publisher-gui
+pip install xmacro
+sudo apt-get install ros-galactic-moveit
 export IGNITION_VERSION=fortress
 #cd src of ros2 workspace and download source code
+git clone https://github.com/gezp/sdformat_tools.git
 git clone https://github.com/gezp/universal_robot_ign.git
 #cd ros2 workspace and build
 colcon build
 ```
 
 ###  UR10 moveit2 demo
-
-* use  `moveit2` and `joint_trajectory_controller` to control UR10.
-
-> moveit2 should be installed ([MoveIt 2 Binary Install](https://moveit.ros.org/install-moveit2/binary/))
 
 launch Ignition Gazebo simulator for UR10 
 
@@ -73,14 +72,8 @@ ros2 run universal_robot_ign test_gripper.py
 #0 : open gripper.
 ```
 
-launch joint state publisher GUI to control UR10 based on joint position
 
-```bash
-ros2 launch universal_robot_ign ur10_robotiq140_demo.launch.py
-```
-
-*  `joint_position_controller` will be used in this demo
-the result:
+the result: 
 
 ![](doc/imgs/ur10_robotiq140_grasp_demo.png)
 
