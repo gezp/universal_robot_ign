@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<robot name="ur10">
+    <xmacro_define_block name="joint" params="joint_name">
+        <joint name="${joint_name}">
+            <param name="initial_position">0</param>
+            <command_interface name="position"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+    </xmacro_define_block>
+    <ros2_control name="IgnitionSystem" type="system">
+        <hardware>
+            <plugin>ign_ros2_control/IgnitionSystem</plugin>
+        </hardware>
+        <xmacro_block name="joint" joint_name="shoulder_pan_joint"/>
+        <xmacro_block name="joint" joint_name="shoulder_lift_joint"/>
+        <xmacro_block name="joint" joint_name="elbow_joint"/>
+        <xmacro_block name="joint" joint_name="wrist_1_joint"/>
+        <xmacro_block name="joint" joint_name="wrist_2_joint"/>
+        <xmacro_block name="joint" joint_name="wrist_3_joint"/>
+    </ros2_control>
+</robot>

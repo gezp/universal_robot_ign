@@ -66,32 +66,6 @@ else()
   message(STATUS "Compiling against Ignition Fortress")
 endif()
 
-# include
-include_directories(include)
-
-# generate universal_robot_ign lib
-AUX_SOURCE_DIRECTORY(${PROJECT_SOURCE_DIR}/src DIR_SRCS)
-add_library(${PROJECT_NAME} ${DIR_SRCS})
-
-ament_target_dependencies(${PROJECT_NAME}
-    rclcpp 
-    std_msgs
-    sensor_msgs
-    trajectory_msgs
-)
-
-target_link_libraries(${PROJECT_NAME}
-  ignition-msgs${IGN_MSGS_VER}::core
-  ignition-transport${IGN_TRANSPORT_VER}::core
-)
-
-#executable node
-add_executable(joint_state_publisher src/joint_state_publisher_main.cpp)
-target_link_libraries(joint_state_publisher ${PROJECT_NAME})
-
-add_executable(joint_controller src/joint_controller_main.cpp)
-target_link_libraries(joint_controller ${PROJECT_NAME})
-
 # for ignition-gazebo plugin RobotiqController
 add_library(RobotiqController SHARED plugins/robotiq_controller/RobotiqController.cpp)
 
@@ -103,25 +77,6 @@ target_link_libraries(RobotiqController
 install( DIRECTORY
     ign launch resource
   DESTINATION share/${PROJECT_NAME}
-)
-
-# Install include directories
-install(DIRECTORY include/
-  DESTINATION include
-)
-
-# Install libraries
-install(TARGETS ${PROJECT_NAME}
-    EXPORT ${PROJECT_NAME}
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib
-    RUNTIME DESTINATION bin
-    INCLUDES DESTINATION include
-)
-
-# Install executables
-install(TARGETS joint_state_publisher  joint_controller
-  DESTINATION lib/${PROJECT_NAME} 
 )
 
 install(TARGETS RobotiqController 
