@@ -21,22 +21,22 @@ def generate_launch_description():
     pkg_universal_robot_ign = get_package_share_directory('universal_robot_ign')
     # path
     world_sdf_path=os.path.join(pkg_universal_robot_ign, 'resource', 'worlds', 'empty_world.sdf') 
-    sdf_xmacro_path=os.path.join(pkg_universal_robot_ign, 'resource', 'sdf', 'ur10_ros.sdf.xmacro')
-    control_urdf_path=os.path.join(pkg_universal_robot_ign, 'resource', 'urdf', 'ur10_ros_control.urdf')
-    control_config_path=os.path.join(pkg_universal_robot_ign, 'resource', 'ur10_moveit_config', 'controller_position.yaml')
-    ign_config_path=os.path.join(pkg_universal_robot_ign, 'ign', 'gui.config')
+    robot_sdf_xmacro=os.path.join(pkg_universal_robot_ign, 'resource', 'sdf', 'ur10_ros.sdf.xmacro')
+    ros_control_urdf=os.path.join(pkg_universal_robot_ign, 'resource', 'urdf', 'ur10_ros_control.urdf')
+    controller_config=os.path.join(pkg_universal_robot_ign, 'resource', 'controller_config', 'ur10_position.yaml')
+    ign_config=os.path.join(pkg_universal_robot_ign, 'ign', 'gui.config')
     rviz2_config = os.path.join(pkg_universal_robot_ign,"launch", "test.rviz")
     # sdf
     robot_macro = XMLMacro4sdf()
-    robot_macro.set_xml_file(sdf_xmacro_path)
-    robot_macro.generate({"ros2_control_config_path" : control_config_path})
-    robot_sdf_xml = robot_macro.to_string()
+    robot_macro.set_xml_file(robot_sdf_xmacro)
+    robot_macro.generate({"ros2_control_config" : controller_config})
+    robot_sdf_string = robot_macro.to_string()
     # urdf
     urdf_generator = UrdfGenerator()
-    urdf_generator.parse_from_sdf_string(robot_sdf_xml)
+    urdf_generator.parse_from_sdf_string(robot_sdf_string)
     urdf_generator.remove_joint('world_ur10_joint')
-    urdf_generator.merge_urdf_file(control_urdf_path)
-    robot_urdf_xml = urdf_generator.to_string()
+    urdf_generator.merge_urdf_file(ros_control_urdf)
+    robot_urdf_string = urdf_generator.to_string()
 
     # ignition_simulator launch
     ignition_simulator = IncludeLaunchDescription(
@@ -44,20 +44,20 @@ def generate_launch_description():
             os.path.join(pkg_ros_ign_gazebo, 'launch', 'ign_gazebo.launch.py'),
         ),
         launch_arguments={
-            'ign_args': world_sdf_path + ' -r -v 2 --gui-config ' + ign_config_path,
+            'ign_args': world_sdf_path + ' -r -v 2 --gui-config ' + ign_config,
         }.items()
     )
 
     # Spawn robot
     spawn_robot = Node(package='ros_ign_gazebo', executable='create',
-        arguments=['-name', 'ur10' ,'-z', '1.4', '-string', robot_sdf_xml],
+        arguments=['-name', 'ur10' ,'-z', '1.4', '-string', robot_sdf_string],
         output='screen')
 
     # robot state publisher
     robot_state_publisher = Node(package="robot_state_publisher",
              executable="robot_state_publisher",
              name="robot_state_publisher",
-             parameters=[{'robot_description': robot_urdf_xml}],
+             parameters=[{'robot_description': robot_urdf_string}],
              output="screen")
 
     # static Robot state publisher
@@ -68,11 +68,12 @@ def generate_launch_description():
              arguments=["0.0", "0.0", "1.4",
                         "0.0", "0.0", "0.0",
                         "world", "base_link"])
+
     # RViz2
     rviz2=Node(package="rviz2",
              executable="rviz2",
              name="rviz2",
-             output="log",
+             output="screen",
              arguments=["--display-config", rviz2_config])
 
     load_joint_state_broadcaster = ExecuteProcess(

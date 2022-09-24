@@ -32,12 +32,12 @@ launch Ignition Gazebo simulator for UR10
 ros2 launch universal_robot_ign ur10_ign.launch.py 
 ```
 
-* `joint_trajectory_controller` will be used in this demo
+* use `gz_ros2_control` for UR10 controller
 
 launch moveit2 `move_group` action server for UR10.
 
 ```bash
-ros2 launch universal_robot_ign ur10_moveit2_demo.launch.py 
+ros2 launch universal_robot_ign ur10_move_group_server.launch.py 
 ```
 
 run moveit2  client node, plan to goal
@@ -51,31 +51,6 @@ ros2 run universal_robot_ign test_pose_goal.py
 the result:
 
 ![](doc/imgs/ur10_moveit2_demo.gif)
-
-### UR10 + Robotiq140 Grasp demo
-
-* control gripper Robotiq140  to grasp object and control UR10  based on joint  position.
-
-launch Ignition Gazebo simulator for UR10  + Robotiq140
-
-```bash
-ros2 launch universal_robot_ign ur10_robotiq140_ign.launch.py 
-```
-
-*  use  Ignition plugin `RobotiqController` to control Robotiq140.
-
-run gripper test node to grasp stick model by closing gripper 
-
-```bash
-ros2 run universal_robot_ign test_gripper.py 
-#1 : close gripper to grasp.
-#0 : open gripper.
-```
-
-
-the result: 
-
-![](doc/imgs/ur10_robotiq140_grasp_demo.png)
 
 ## Models
 
@@ -94,26 +69,7 @@ in addition, it also provides a combination model `ur10_robotiq140` (`resource/x
 
 ### UR Controller
 
-![](doc/imgs/controller_struture.png)
-
-Ignition Controller
-
-* Ignition plugin `ignition-gazebo-joint-position-controller-system` is used to control joints of robotic arm .
-* The position PID parameter should be set in plugins.
-
->  PID parameter：
->
-> * The PID parameter of Ignition joint position controller plugin is set roughly ,so the performance of control is not well, you can modify PID parameter by modifying SDF file of model.
-
-ROS controller
-
-* `joint_position_controller` 
-  *  receive ROS msg `sensor_msgs::msg::JointState` and publish target position `ignition::msgs::Double` for each joint (control based on position pid) . 
-  * it's a simple communication bridge 
-* `joint_trajectory_controller` 
-  * receive ROS msg `trajectory_msgs::msg::JointTrajectory`
-  * use interpolation based on time for joint trajectory and  keep publishing target position according to current time until the last trajectory point is processed .
-  * this is not the most efficient way, but easy to Implement (it can work well with moveit2)
+* use `gz_ros2_control`
 
 ### Robotiq Ignition Controller
 
@@ -168,3 +124,4 @@ universal_robot_ign is provided under MIT License.
 
 > * the 3d model is from  [ros-industrial/universal_robot](https://github.com/ros-industrial/universal_robot) and  [ros-industrial/robotiq](https://github.com/ros-industrial/robotiq) which are provided under BSD License.
 > * some code snippets is from [ign_moveit2](https://github.com/AndrejOrsula/ign_moveit2)  for ur10 moveit2 demo .
+
