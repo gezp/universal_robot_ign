@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<sdf version="1.7">
+    <!--include defination-->
+    <xmacro_include uri="model://ur10/ur10.def.xmacro"/>
+    <xmacro_define_value name="ros2_control_config" value=""/>
+    <!--model-->
+    <model name="ur10" canonical_link="base_link">
+        <xmacro_block name="ur10" parent="__model__"/>
+        <joint name="world_ur10_joint" type="fixed">
+            <parent>world</parent>
+            <child>base_link</child>
+        </joint>
+        <!--ros control plugins-->
+        <plugin filename="ign_ros2_control-system" name="ign_ros2_control::IgnitionROS2ControlPlugin">
+            <parameters>${ros2_control_config}</parameters>
+        </plugin>
+    </model>
+</sdf>
